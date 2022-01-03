@@ -47,6 +47,7 @@ namespace Squish
 
         private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
         {
+            LoggingService.Log("Starting desktop...", Severity.Info);
             new Taskbar().Show();
         }
     }

@@ -1,5 +1,5 @@
 ﻿using Squish.Interop;
-using Squish.Interop.Linux;
+using Squish.Interop.X11;
 using Squish.Interop.Mock;
 using System;
 using System.Collections.Generic;
@@ -15,8 +15,16 @@ namespace Squish.Services
 
         public WindowManagementService()
         {
-            //if (OperatingSystem.IsLinux()) WindowManager = new LinuxWindowManager();
-            /*else*/ WindowManager = new MockWindowManager();
+            LoggingService.Log("Starting window management service", Severity.Info);
+            if (OperatingSystem.IsLinux())
+            {
+                LoggingService.Log("Using X11 window manager", Severity.Info);
+                WindowManager = new X11WindowManager();
+                return;
+            }
+
+            LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
+            WindowManager = new MockWindowManager();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Squish.Interop.Mock
 
         public event EventHandler? WindowsUpdated;
 
-        public bool FocusWindow(string id)
+        public void FocusWindow(string id)
         {
             bool wasWindowFound = false;
             foreach (var window in workingRunningWindows)
@@ -53,7 +53,7 @@ namespace Squish.Interop.Mock
                 }
             }
             WindowsUpdated?.Invoke(null, EventArgs.Empty);
-            return wasWindowFound;
+            if (!wasWindowFound) throw new InvalidOperationException("can't focus a window that doesn't exist");
         }
     }
 }

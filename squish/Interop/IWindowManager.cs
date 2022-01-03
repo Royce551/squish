@@ -13,6 +13,6 @@ namespace Squish.Interop
 
         public event EventHandler WindowsUpdated;
 
-        public bool FocusWindow(string id);
+        public void FocusWindow(string id);
     }
 }
