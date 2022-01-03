@@ -15,8 +15,8 @@ namespace Squish.Services
 
         public WindowManagementService()
         {
-            if (OperatingSystem.IsLinux()) WindowManager = new LinuxWindowManager();
-            else WindowManager = new MockWindowManager();
+            //if (OperatingSystem.IsLinux()) WindowManager = new LinuxWindowManager();
+            /*else*/ WindowManager = new MockWindowManager();
         }
     }
 }

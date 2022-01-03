@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ReactiveUI;
 
 namespace Squish.ViewModels.Taskbar
 {
@@ -16,12 +17,30 @@ namespace Squish.ViewModels.Taskbar
     {
         public ObservableCollection<TaskbarWindow> RunningWindows { get; set; } = new();
 
+        public TaskbarWindow ActiveWindow
+        {
+            get => RunningWindows.First(x => x.IsActiveWindow == true);
+            set
+            {
+                if (value is not null) FocusWindowCommand(value.Id);
+            }
+        }
 
-        public TaskbarViewModel() => Update();
+        public TaskbarViewModel()
+        {
+            App.WindowManager.WindowsUpdated += WindowManager_WindowsUpdated;
+            Update();
+        }
+
+        private void WindowManager_WindowsUpdated(object? sender, EventArgs e) => Update();
+
+        public void FocusWindowCommand(string id) => App.WindowManager.FocusWindow(id);
 
         public void Update()
         {
-            RunningWindows = new(App.Windows.WindowManager.RunningWindows);
+            RunningWindows = new(App.WindowManager.RunningWindows);
+            this.RaisePropertyChanged(nameof(RunningWindows));
+            this.RaisePropertyChanged(nameof(ActiveWindow));
         }
     }
 

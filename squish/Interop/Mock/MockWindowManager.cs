@@ -10,24 +10,50 @@ namespace Squish.Interop.Mock
 {
     public class MockWindowManager : IWindowManager
     {
-        public List<TaskbarWindow> RunningWindows => new List<TaskbarWindow>
+        public List<TaskbarWindow> RunningWindows => workingRunningWindows;
+
+        private List<TaskbarWindow> workingRunningWindows = new List<TaskbarWindow>
         {
             new()
             {
+                Id = "1",
                 Title = "i wanna",
-                Icon = File.ReadAllBytes(@"C:\Users\poohw\OneDrive\Music\3rd Strike\[DCKS-0049] V.A. - Σ3-2017 3rd STRIKE\jacket.png")
+                //Icon = File.ReadAllBytes(@"jacket.png")
             },
             new()
             {
+                Id = "2",
                 Title = "hug a",
                 IsActiveWindow = true,
-                Icon = File.ReadAllBytes(@"C:\Users\poohw\OneDrive\Music\3rd Strike\[DCKS-0049] V.A. - Σ3-2017 3rd STRIKE\jacket.png")
+                //Icon = File.ReadAllBytes(@"jacket.png")
             },
             new()
             {
+                Id = "3",
                 Title = "catgirl",
-                Icon = File.ReadAllBytes(@"C:\Users\poohw\OneDrive\Music\3rd Strike\[DCKS-0049] V.A. - Σ3-2017 3rd STRIKE\jacket.png")
+                //Icon = File.ReadAllBytes(@"jacket.png")
             }
         };
+
+        public event EventHandler? WindowsUpdated;
+
+        public bool FocusWindow(string id)
+        {
+            bool wasWindowFound = false;
+            foreach (var window in workingRunningWindows)
+            {
+                if (window.Id == id)
+                {
+                    window.IsActiveWindow = true;
+                    wasWindowFound = true;
+                }
+                else
+                {
+                    window.IsActiveWindow = false;
+                }
+            }
+            WindowsUpdated?.Invoke(null, EventArgs.Empty);
+            return wasWindowFound;
+        }
     }
 }

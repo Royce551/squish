@@ -10,5 +10,9 @@ namespace Squish.Interop
     public interface IWindowManager
     {
         public List<TaskbarWindow> RunningWindows { get; }
+
+        public event EventHandler WindowsUpdated;
+
+        public bool FocusWindow(string id);
     }
 }

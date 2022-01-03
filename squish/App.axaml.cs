@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Squish.Interop;
 using Squish.Services;
 using Squish.ViewModels;
 using Squish.Views;
@@ -11,6 +12,8 @@ namespace Squish
     public class App : Application
     {
         public static WindowManagementService Windows = new WindowManagementService();
+
+        public static IWindowManager WindowManager => Windows.WindowManager;
 
         public override void Initialize()
         {
