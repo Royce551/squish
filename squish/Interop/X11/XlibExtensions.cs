@@ -27,22 +27,9 @@ namespace Squish.Interop.X11
             out IntPtr bytes_after_return,
             out IntPtr prop_return
         );
+        
         [DllImport("libX11.so.6")]
-        public static extern int XGetWindowProperty
-        (
-            IntPtr display,
-            Window w,
-            Atom property,
-            long long_offset,
-            long long_length,
-            bool delete,
-            Atom req_type,
-            out Atom actual_type_return,
-            out int actual_format_return,
-            out ulong nitems_return,
-            out ulong bytes_after_return,
-            out long[] prop_return
-        );
+        public static extern void XFree(string data);
 
         [DllImport("libX11.so.6")]
         public static extern Atom XInternAtom
