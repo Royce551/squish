@@ -9,7 +9,7 @@ using static X11.Xlib;
 
 namespace Squish.Interop.X11
 {
-    public class XlibExtensions
+    public unsafe class XlibExtensions
     {
         [DllImport("libX11.so.6")]
         public static extern int XGetWindowProperty
@@ -23,9 +23,9 @@ namespace Squish.Interop.X11
             Atom req_type,
             out Atom actual_type_return,
             out int actual_format_return,
-            out ulong nitems_return,
-            out ulong bytes_after_return,
-            out byte[] prop_return
+            out IntPtr nitems_return,
+            out IntPtr bytes_after_return,
+            out IntPtr prop_return
         );
         [DllImport("libX11.so.6")]
         public static extern int XGetWindowProperty

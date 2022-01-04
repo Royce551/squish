@@ -41,10 +41,26 @@ namespace Squish.Interop.X11
             var prop = XInternAtom(display, "_NET_CLIENT_LIST", false);
 
             LoggingService.LogDebug($"XInternAtom: {prop}");
+            unsafe
+            {
+                XGetWindowProperty(display, rootWindow, prop, 0, ~0, false, (Atom)0 /*AnyPropertyType*/, out Atom actualTypeReturn, out int actualFormatReturn, out IntPtr nItemsReturn, out IntPtr bytesAfterReturn, out IntPtr propReturn);
+                var data = (IntPtr*)propReturn.ToPointer();
 
-            XGetWindowProperty(display, rootWindow, prop, 0, ~0, false, (Atom)0 /*AnyPropertyType*/, out Atom actualTypeReturn, out int actualFormatReturn, out ulong nItemsReturn, out ulong bytesAfterReturn, out long[] propReturn);
+                var windows = new List<ulong>();
+                for (var x = 0; x < nItemsReturn.ToInt32(); x++)
+                {
+                    windows.Add((ulong)data[x]);
+                }
 
-            LoggingService.LogDebug($"XGetWindowProperty: actualTypeReturn: {actualTypeReturn}, actualFormatReturn: {actualFormatReturn}, nItemsReturn: {nItemsReturn}, bytesAfterReturn: {bytesAfterReturn}, propReturn: {string.Join(", ", propReturn)}");
+                foreach (var window in windows)
+                {
+                    XGetWindowAttributes(display, (Window)window, out var attributes);
+                    LoggingService.LogDebug($"X: {attributes.x} Y: {attributes.y} Width: {attributes.width} Height: {attributes.height}");
+                }
+
+                LoggingService.LogDebug($"{string.Join(", ", windows)}");
+            }
+            
         }
 
         public void FocusWindow(string id)
