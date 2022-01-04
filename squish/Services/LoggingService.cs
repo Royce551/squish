@@ -38,5 +38,11 @@ namespace Squish.Services
             Console.WriteLine($"{prefix}: {text}");
             Console.ResetColor();
         }
+
+        public static void LogDebug(string text) => Log(text, Severity.Debug);
+        public static void LogInfo(string text) => Log(text, Severity.Info);
+        public static void LogWarning(string text) => Log(text, Severity.Warning);
+        public static void LogError(string text) => Log(text, Severity.Error);
+        public static void LogFatal(string text) => Log(text, Severity.Fatal);
     }
 }
