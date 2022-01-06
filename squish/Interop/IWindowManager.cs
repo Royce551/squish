@@ -1,4 +1,5 @@
-﻿using Squish.Models;
+﻿using Avalonia.Controls;
+using Squish.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace Squish.Interop
 {
     public interface IWindowManager
     {
-        public List<TaskbarWindow> RunningWindows { get; }
+        public List<IWindow> RunningWindows { get; }
 
         public event EventHandler WindowsUpdated;
 
-        public void FocusWindow(string id);
+        //public void FocusWindow(string id);
+
+        //public bool ReserveAreaFor(Window window);
     }
 }

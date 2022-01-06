@@ -1,6 +1,5 @@
 ﻿using Squish.Interop;
 using Squish.Interop.X11;
-using Squish.Interop.Mock;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,9 +21,9 @@ namespace Squish.Services
                 WindowManager = new X11WindowManager();
                 return;
             }
-
-            LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
-            WindowManager = new MockWindowManager();
+            throw new Exception();
+            //LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
+            //WindowManager = new MockWindowManager();
         }
     }
 }

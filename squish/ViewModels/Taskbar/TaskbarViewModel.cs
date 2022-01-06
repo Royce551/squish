@@ -10,19 +10,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ReactiveUI;
+using Squish.Interop;
 
 namespace Squish.ViewModels.Taskbar
 {
     public class TaskbarViewModel : ViewModelBase
     {
-        public ObservableCollection<TaskbarWindow> RunningWindows { get; set; } = new();
+        public ObservableCollection<IWindow> RunningWindows { get; set; } = new();
 
-        public TaskbarWindow ActiveWindow
+        public IWindow ActiveWindow
         {
-            get => RunningWindows.First(x => x.IsActiveWindow == true);
+            get => RunningWindows.First(x => x.IsFocused == true);
             set
             {
-                if (value is not null) FocusWindowCommand(value.Id);
+                if (value is not null) FocusWindowCommand(value);
             }
         }
 
@@ -34,7 +35,7 @@ namespace Squish.ViewModels.Taskbar
 
         private void WindowManager_WindowsUpdated(object? sender, EventArgs e) => Update();
 
-        public void FocusWindowCommand(string id) => App.WindowManager.FocusWindow(id);
+        public void FocusWindowCommand(IWindow window) => window.IsFocused = true;
 
         public void Update()
         {

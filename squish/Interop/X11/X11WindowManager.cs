@@ -16,16 +16,16 @@ namespace Squish.Interop.X11
 {
     public class X11WindowManager : IWindowManager
     {
-        public List<TaskbarWindow> RunningWindows
+        public List<IWindow> RunningWindows
         {
             get
             {
-                var squishRunningWindows = new List<TaskbarWindow>();
+                var squishRunningWindows = new List<IWindow>();
                 unsafe
                 {
                     var prop = XInternAtom(display, "_NET_CLIENT_LIST", false);
                     XGetWindowProperty(display, rootWindow, prop, 0, ~0, false, (Atom)0 /*AnyPropertyType*/, out Atom actualTypeReturn, out int actualFormatReturn, out IntPtr nItemsReturn, out IntPtr bytesAfterReturn, out IntPtr propReturn);
-                    var data = (UIntPtr*)propReturn.ToPointer();
+                    var data = (UIntPtr*)propReturn.ToPointer(); // TODO: XFree propReturn
 
                     var windows = new List<ulong>();
                     for (var x = 0; x < nItemsReturn.ToInt32(); x++)
@@ -35,19 +35,7 @@ namespace Squish.Interop.X11
 
                     foreach (var windowId in windows)
                     {
-                        var window = (Window)windowId;
-                        string name_return = "";
-                        XFetchName(display, window, ref name_return);
-                        squishRunningWindows.Add(new TaskbarWindow
-                        {
-                            Id = windowId.ToString(),
-                            Title = name_return
-                        });
-                    }
-
-                    foreach (var window in squishRunningWindows)
-                    {
-                        LoggingService.LogDebug($"{window.Id} - {window.Title}, {window.IsActiveWindow}");
+                        squishRunningWindows.Add(new X11Window(display, windowId, rootWindow));
                     }
 
                     return squishRunningWindows;
@@ -86,11 +74,6 @@ namespace Squish.Interop.X11
                 
             //}
             
-        }
-
-        public void FocusWindow(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
