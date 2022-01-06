@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using X11;
 using static X11.Xlib;
 using static Squish.Interop.X11.XlibExtensions;
+using System.Runtime.InteropServices;
+using Squish.Services;
 
 namespace Squish.Interop.X11
 {
@@ -19,45 +21,47 @@ namespace Squish.Interop.X11
         {
             get
             {
-                var prop = XInternAtom(display, "_NET_ACTIVE_WINDOW", false);
-                XGetWindowProperty(display, window, prop, 0, ~0, false, 0, out Atom actualTypeReturn, out int actualFormatReturn, out IntPtr nItemsReturn, out IntPtr bytesAfterReturn, out IntPtr propReturn);
-                var data = (UIntPtr*)propReturn.ToPointer();
-                var focusedWindowId = (ulong)data[2];
-
-                return window == (Window)focusedWindowId;
+                LoggingService.LogDebug($"is {Title} focused?");
+                var focusedWindowId = (ulong[])X11Utilities.GetWindowProperty("_NET_ACTIVE_WINDOW", display, rootWindow);
+                LoggingService.LogDebug($"{string.Join(", ", focusedWindowId)}");
+                LoggingService.LogDebug($"{window == (Window)focusedWindowId[0]}");
+                return window == (Window)focusedWindowId[0];
             }
             set
             {
-                //if (value)
-                //{
-                //    var prop = XInternAtom(display, "_NET_ACTIVE_WINDOW", false);
-                //    var rootWindow = XRootWindow(display, 0);
-                //    XClientMessageEvent e;
-                //    e.window = window;
-                //    e.message_type = prop;
-                //    e.format = 32;
-                //    e.data
+                if (value)
+                {
+                    LoggingService.LogDebug("a");
+                    var prop = XInternAtom(display, "_NET_ACTIVE_WINDOW", false);
+                    var rootWindow = XRootWindow(display, 0);
+                    var e = new XClientMessageEvent();
+                    e.window = window;
+                    e.message_type = prop;
+                    e.format = 32;
+                    LoggingService.LogDebug("a");
+                    var time = (ulong[])X11Utilities.GetWindowProperty("_NET_WM_USER_TIME", display, window);
+                    LoggingService.LogDebug($"{time[0]}");
+                    var data = new ulong[]
+                    {
+                        1, // source indication
+                        time[0], //timestamp
+                        (ulong)window,
+                    };
+                    LoggingService.LogDebug("about to alloc");
+                    IntPtr dataPtr = Marshal.AllocHGlobal(Marshal.SizeOf(data));
+                    Marshal.StructureToPtr(data, dataPtr, false);
+                    LoggingService.LogDebug($"");
+                    e.data = dataPtr;
+                    LoggingService.LogDebug("a");
+                    IntPtr eventPtr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
+                    Marshal.StructureToPtr(e, eventPtr, false);
+                    LoggingService.LogDebug("a");
+                    XSendEvent(display, rootWindow, false, (long)(EventMask.SubstructureRedirectMask | EventMask.SubstructureNotifyMask), eventPtr);
+                }
+                else
+                {
 
-                //    var x = &e;
-                    
-                    
-
-                //    //var userTimeProp = XInternAtom(display, "_NET_WM_USER_TIME", false);
-                //    //XGetWindowProperty()
-
-
-                //    var data = new ulong[]
-                //    {
-                //        1,
-
-                //    };
-
-                //    XSendEvent(display, 
-                //}
-                //else
-                //{
-
-                //}
+                }
             }
         }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using static X11.Xlib;
 using static Squish.Interop.X11.XlibExtensions;
 using X11;
+using Squish.Services;
 
 namespace Squish.Interop.X11
 {
@@ -25,18 +26,18 @@ namespace Squish.Interop.X11
 
             if (actualFormatReturn == 8)
             {
+                LoggingService.LogDebug($"{property} is a string");
                 var dataPtr = (UIntPtr*)propReturn.ToPointer(); // TODO: this needs to be XFree'd
-
                 var data = new List<char>();
                 for (var x = 0; x < nItemsReturn.ToInt32(); x++)
                 {
                     data.Add((char)dataPtr[x]);
                 } // TODO: figure out a better way to do this
-                
                 return new string(data.ToArray());
             }
             else if (actualFormatReturn == 16)
             {
+                LoggingService.LogDebug($"{property} is a short[]");
                 var dataPtr = (UIntPtr*)propReturn.ToPointer(); // TODO: this needs to be XFree'd
 
                 var data = new List<short>();
@@ -49,6 +50,7 @@ namespace Squish.Interop.X11
             }
             else if (actualFormatReturn == 32)
             {
+                LoggingService.LogDebug($"{property} is a ulong[]");
                 var dataPtr = (UIntPtr*)propReturn.ToPointer(); // TODO: this needs to be XFree'd
 
                 var data = new List<ulong>();
@@ -59,7 +61,7 @@ namespace Squish.Interop.X11
 
                 return data.ToArray();
             }
-            else throw new Exception("something happened");
+            else throw new Exception($"Unexpected format: {actualFormatReturn}");
         }
 
     }
