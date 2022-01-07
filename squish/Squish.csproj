@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -15,10 +15,15 @@
     <AvaloniaXaml Remove="Utilities\**" />
     <Compile Remove="Utilities\**" />
     <EmbeddedResource Remove="Utilities\**" />
+    <Folder Include="ViewModels\Background\" />
+    <Folder Include="ViewModels\Widgetbar\" />
+    <Folder Include="Views\Background\" />
+    <Folder Include="Views\Widgetbar\" />
     <None Remove="Utilities\**" />
     <Folder Include="ViewModels\Launcher\" />
     <Folder Include="Views\Launcher\" />
     <None Remove=".gitignore" />
+    <None Remove="FreeDesktop\NewFile1.txt" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.10" />
@@ -26,8 +31,8 @@
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.10" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.10" />
+    <PackageReference Include="TerraFX.Interop.Xlib" Version="6.3.0-beta3" />
     <PackageReference Include="Tmds.DBus" Version="0.9.1" />
-    <PackageReference Include="X11" Version="1.0.6" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SIADL.Avalonia">

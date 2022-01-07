@@ -13,9 +13,5 @@ namespace Squish.Interop
         public List<IWindow> RunningWindows { get; }
 
         public event EventHandler WindowsUpdated;
-
-        //public void FocusWindow(string id);
-
-        //public bool ReserveAreaFor(Window window);
     }
 }

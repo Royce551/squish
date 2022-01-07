@@ -21,7 +21,7 @@ namespace Squish.Services
                 WindowManager = new X11WindowManager();
                 return;
             }
-            throw new Exception();
+            throw new Exception("Platform not supported");
             //LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
             //WindowManager = new MockWindowManager();
         }

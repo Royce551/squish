@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using X11;
-using static X11.Xlib;
-using static Squish.Interop.X11.XlibExtensions;
+using TerraFX.Interop.Xlib;
+using static TerraFX.Interop.Xlib.Xlib;
 using System.Runtime.InteropServices;
 using Squish.Services;
 
@@ -13,71 +12,40 @@ namespace Squish.Interop.X11
 {
     public unsafe class X11Window : IWindow
     {
-        public string Title { get; }
-
-        public byte[]? Icon { get; }
-
-        public bool IsFocused
-        {
+        public string Title 
+        { 
             get
             {
-                LoggingService.LogDebug($"is {Title} focused?");
-                var focusedWindowId = (ulong[])X11Utilities.GetWindowProperty("_NET_ACTIVE_WINDOW", display, rootWindow);
-                LoggingService.LogDebug($"{string.Join(", ", focusedWindowId)}");
-                LoggingService.LogDebug($"{window == (Window)focusedWindowId[0]}");
-                return window == (Window)focusedWindowId[0];
-            }
-            set
-            {
-                if (value)
-                {
-                    LoggingService.LogDebug("a");
-                    var prop = XInternAtom(display, "_NET_ACTIVE_WINDOW", false);
-                    var rootWindow = XRootWindow(display, 0);
-                    var e = new XClientMessageEvent();
-                    e.window = window;
-                    e.message_type = prop;
-                    e.format = 32;
-                    LoggingService.LogDebug("a");
-                    var time = (ulong[])X11Utilities.GetWindowProperty("_NET_WM_USER_TIME", display, window);
-                    LoggingService.LogDebug($"{time[0]}");
-                    var data = new ulong[]
-                    {
-                        1, // source indication
-                        time[0], //timestamp
-                        (ulong)window,
-                    };
-                    LoggingService.LogDebug("about to alloc");
-                    IntPtr dataPtr = Marshal.AllocHGlobal(Marshal.SizeOf(data));
-                    Marshal.StructureToPtr(data, dataPtr, false);
-                    LoggingService.LogDebug($"");
-                    e.data = dataPtr;
-                    LoggingService.LogDebug("a");
-                    IntPtr eventPtr = Marshal.AllocHGlobal(Marshal.SizeOf(e));
-                    Marshal.StructureToPtr(e, eventPtr, false);
-                    LoggingService.LogDebug("a");
-                    XSendEvent(display, rootWindow, false, (long)(EventMask.SubstructureRedirectMask | EventMask.SubstructureNotifyMask), eventPtr);
-                }
-                else
-                {
-
-                }
+                return X11Utilities.GetWindowProperty<sbyte>("_NET_WM_NAME", window, "UTF8_STRING".AsAtom()).AsString();
             }
         }
 
-        private IntPtr display;
+        Window window;
 
-        private Window window;
-        private Window rootWindow;
-
-        public X11Window(IntPtr display, ulong windowId, Window rootWindow)
+        public X11Window(Window windowId)
         {
-            this.display = display;
+            window = windowId;
 
-            window = (Window)windowId;
-            string name_return = "";
-            XFetchName(display, window, ref name_return);
-            Title = name_return; // TODO: XFree name_return
+            XWindowAttributes attrs;
+            XGetWindowAttributes(X11WindowManager.Display, windowId, &attrs);
+            XSelectInput(X11WindowManager.Display, windowId, attrs.your_event_mask | PropertyChangeMask | StructureNotifyMask | SubstructureNotifyMask);
+
+            X11Environment.X11PropertyNotifyReceived += (_, xevent) => 
+            {
+                if (xevent.window != this.window) return;
+
+                switch (new string(XGetAtomName(X11WindowManager.Display, xevent.atom))) {
+                    case "_NET_WM_NAME":
+                        TitleChanged?.Invoke(this, this.Title);
+                        break;
+                    case "_NET_WM_ICON":
+                        IconChanged?.Invoke(this, null /* TODO: this.Icon */);
+                        break;
+                }
+            }
         }
+
+        public event EventHandler<string>? TitleChanged;
+        public event EventHandler<X11Icon>? IconChanged;
     }
 }
