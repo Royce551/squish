@@ -185,9 +185,9 @@ public static class DesktopFileParser
                     {
                         if (value is not "true" or "false")
                             throw new DesktopFileException($"Invalid value {value} for key of type boolean {key}");
-                        prop.SetValue(desktopFile, value)
+                        prop.SetValue(desktopFile, value);
                     }
-                    else if ()
+                    //implement locale strings
                 }
                 else
                 {
