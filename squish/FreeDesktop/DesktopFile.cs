@@ -16,35 +16,41 @@ internal class DefaultValueIfNotPresentAttribute : Attribute
 
 public class DesktopFile
 {
-    string Type { get; set; }
-    string? Version { get; set; }
-    LocaleString Name { get; set; }
-    LocaleString? GenericName { get; set; }
+    public string? Type { get; set; }
+    public string? Version { get; set; }
+    public LocaleString? Name { get; set; }
+    public LocaleString? GenericName { get; set; }
+
     [DefaultValueIfNotPresent(false)]
-    bool NoDisplay { get; set; }
-    LocaleString? Comment { get; set; }
-    string? Icon { get; set; }
+    public bool NoDisplay { get; set; }
+
+    public LocaleString? Comment { get; set; }
+    public string? Icon { get; set; }
+
     [DefaultValueIfNotPresent(false)]
-    bool Hidden { get; set; }
-    string[]? OnlyShowIn { get; set; }
-    string[]? NotShowIn { get; set; }
+    public bool Hidden { get; set; }
+    public string[]? OnlyShowIn { get; set; }
+    public string[]? NotShowIn { get; set; }
+
     [DefaultValueIfNotPresent(false)]
-    bool DBusActivatable { get; set; }
-    string? TryExec { get; set; }
-    string? Exec { get; set; }
-    string? Path { get; set; }
-    bool? Terminal { get; set; }
-    DesktopFileAction[]? Actions { get; set; } //
-    string[]? MimeType { get; set; }
-    string[]? Categories { get; set; }
-    string[]? Implements { get; set; }
-    LocaleString[]? Keywords { get; set; }
-    Dictionary<string, string> UnknownDesktopEntryKeys { get; set; }
-    Dictionary<string, string[]> UnknownGroups { get; set; }
+    public bool DBusActivatable { get; set; }
+
+    public string? TryExec { get; set; }
+    public string? Exec { get; set; }
+    public string? Path { get; set; }
+    public bool? Terminal { get; set; }
+    public DesktopFileAction[]? Actions { get; set; } //
+    public string[]? MimeType { get; set; }
+    public string[]? Categories { get; set; }
+    public string[]? Implements { get; set; }
+    public LocaleString[]? Keywords { get; set; }
+    public Dictionary<string, string>? UnknownDesktopEntryKeys { get; set; }
+    public Dictionary<string, string[]>? UnknownGroups { get; set; }
 };
 
-public record DesktopFileAction(
+public record DesktopFileAction
+(
     string Name,
     string? Icon,
     string? Exec
-)
+);

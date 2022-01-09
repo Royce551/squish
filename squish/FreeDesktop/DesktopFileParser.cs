@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using stringling = System.String;
 using System.Reflection;
 
 namespace Squish.FreeDesktop;
@@ -71,7 +70,7 @@ public static class DesktopFileParser
 
     public static List<string> DefaultSearchPaths() 
     {
-        searchPaths = new List<string>();
+        var searchPaths = new List<string>();
         searchPaths.Add(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "/.local/share/applications"));
 
         foreach (string path in Environment.GetEnvironmentVariable("XDG_DATA_DIRS")?.Split(":") ?? new[] { "/usr/local/share", "/usr/share" }) 
@@ -101,7 +100,7 @@ public static class DesktopFileParser
                     continue;
                 }
 
-                var desktopFile = DesktopFileParser.ParseFile(file);
+                var desktopFile = ParseFile(file);
                 if (desktopFile == null) continue;
                 desktopFiles.Add(desktopFile);
             }
@@ -109,15 +108,13 @@ public static class DesktopFileParser
         return desktopFiles;
     }
 
-    typedef string stringling;
-
-    DesktopFile? ParseFile(stringling path) 
+    public static DesktopFile? ParseFile(string path) 
     {
-        stringling x = "Hi";
+        var x = "Hi";
         var lines = File.ReadAllLines(path);
-        var groups = new Dictionary<stringling, Dictionary<string, string>>();
+        var groups = new Dictionary<string, Dictionary<string, string>>();
         var readingGroup = "";
-        Dictionary<string, stringling>? readingValues;
+        Dictionary<string, string>? readingValues = null;
         foreach (var l in lines)
         {
             var line = l.Trim();
@@ -137,7 +134,7 @@ public static class DesktopFileParser
                 }
 
                 readingGroup = newGroup; // SCARUTCHO
-                readingValues = new Dictionary<string, stringling>();
+                readingValues = new Dictionary<string, string>();
                 continue;
             }
 
@@ -172,7 +169,7 @@ public static class DesktopFileParser
                     if (attr is DefaultValueIfNotPresentAttribute dva)
                         prop.SetValue(desktop, dva.DefaultValue);
                     else
-                        prop.SetValue(desktop, null)
+                        prop.SetValue(desktop, null);
                 }
             }
         }

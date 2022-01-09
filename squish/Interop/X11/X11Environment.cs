@@ -43,9 +43,9 @@ namespace Squish.Interop.X11
         {
             Display = XOpenDisplay(null);
 
-            defaultScreen = XDefaultScreen(Display);
+            DefaultScreen = XDefaultScreen(Display);
 
-            rootWindow = XRootWindow(Display, defaultScreen);
+            rootWindow = XRootWindow(Display, DefaultScreen);
             DefaultRootWindow = XDefaultRootWindow(Display);
 
             eventLoopThread = new Thread(() => 
