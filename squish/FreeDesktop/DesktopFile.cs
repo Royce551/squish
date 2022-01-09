@@ -42,7 +42,7 @@ public class DesktopFile
     public string[]? MimeType { get; init; }
     public string[]? Categories { get; init; }
     public string[]? Implements { get; init; }
-    public LocaleString[]? Keywords { get; init; }
+    public LocaleStrings? Keywords { get; init; }
     public Dictionary<string, string>? UnknownDesktopEntryKeys { get; init; }
     public Dictionary<string, string[]>? UnknownGroups { get; init; }
 };
@@ -58,6 +58,15 @@ public class LocaleString : Dictionary<CultureInfo, string>
 {
     public string Default { get; }
     public LocaleString(string @default, IDictionary<CultureInfo, string> dict) : base(dict)
+    {
+        Default = @default;
+    }
+}
+
+public class LocaleStrings : Dictionary<CultureInfo, string[]>
+{
+    public string Default { get; }
+    public LocaleStrings(string @default, IDictionary<CultureInfo, string[]> dict) : base(dict)
     {
         Default = @default;
     }
