@@ -1,4 +1,6 @@
+using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Squish.FreeDesktop;
 
@@ -76,7 +78,7 @@ public static class DesktopFileParser
         return searchPaths;
     }
 
-    public static List<DesktopFile> Applications(List<string> searchPaths = null) 
+    public static List<DesktopFile> Applications(List<string>? searchPaths = null) 
     {
         //TODO: filesyste, listener for desktop files
         if (searchPaths == null) 
@@ -113,7 +115,6 @@ public static class DesktopFileParser
     /// <exception cref="DesktopFileException">Thrown if file is invalid</exception>
     public static DesktopFile ParseFile(string path) 
     {
-        var x = "Hi";
         var lines = File.ReadAllLines(path);
         var groups = new Dictionary<string, Dictionary<string, string>>();
         var readingGroup = "";
@@ -167,12 +168,22 @@ public static class DesktopFileParser
             foreach (var prop in typeof(DesktopFile).GetProperties())
             {
                 var key = prop.Name;
-                
-                if (key.EndsWith(']')) 
-                    continue;
 
                 if (values.TryGetValue(prop.Name, out var value))
                 {
+                    static string EscapeDesktopString(string original) =>
+                        original.Replace(@"\n", "\x0A").Replace(@"\s", " ").Replace(@"\r", "\x0D").Replace(@"\t", "\t").Replace(@"\\", @"\").Replace(@"\;", ";");
+
+                    static CultureInfo ConvertToNetCulture(string original)
+                    {
+                        var onlyDashes = original.Replace('@', '-').Replace('_', '-');
+                        var split = onlyDashes.Split(' ');
+                        if (split.Length == 3)
+                            return new CultureInfo($"{split[0]}-{split[2]}-{split[1]}");
+                        else
+                            return new CultureInfo(onlyDashes);
+                    }
+
                     if (prop.PropertyType == typeof(string))
                     {
                         prop.SetValue(desktopFile, EscapeDesktopString(value));
@@ -187,7 +198,22 @@ public static class DesktopFileParser
                             throw new DesktopFileException($"Invalid value {value} for key of type boolean {key}");
                         prop.SetValue(desktopFile, value);
                     }
-                    //implement locale strings
+
+                    //Locale strings
+                    var regex = new Regex($@"{key}\[([A-z_@])+\]");
+                    var defaultValue = value;
+                    var otherLocales = values.Select(x => regex.Match(x.Key)).Where(x => x.Success);
+                    var localesDict = otherLocales.Select(l => (ConvertToNetCulture(l.Groups[0].Value), values[l.Value]));
+                    if (prop.PropertyType == typeof(LocaleStrings))
+                    {
+                        prop.SetValue(desktopFile, new LocaleStrings(defaultValue, localesDict.Select((kvp) => (kvp.Item1,
+                            kvp.Item2.Split(';').Select(EscapeDesktopString).ToArray())).ToDictionary(x => x.Item1, x => x.Item2)));
+                    }
+                    else if (prop.PropertyType == typeof(LocaleString))
+                    {
+                        prop.SetValue(desktopFile, new LocaleString(defaultValue, localesDict.Select((kvp) => (kvp.Item1,
+                            EscapeDesktopString(kvp.Item2))).ToDictionary(x => x.Item1, x => x.Item2)));
+                    }
                 }
                 else
                 {
@@ -209,6 +235,5 @@ public static class DesktopFileParser
         }
     }
 
-    static string EscapeDesktopString(string original) =>
-        original.Replace(@"\n", "\x0A").Replace(@"\s", " ").Replace(@"\r", "\x0D").Replace(@"\t", "\t").Replace(@"\\", @"\").Replace(@"\;", ";");
+
 }
