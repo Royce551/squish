@@ -3,6 +3,8 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using stringling = System.String;
+using System.Reflection;
+
 namespace Squish.FreeDesktop;
 
 public static class DesktopFileParser 
@@ -153,5 +155,26 @@ public static class DesktopFileParser
             return null; //file is invalid
         }
 
+        var desktop = new DesktopFile();
+
+        if (groups.TryGetValue("Desktop Entry", out var desktopEntryValues))
+        {
+            
+            foreach (var prop in typeof(DesktopFile).GetProperties())
+            {
+                if (desktopEntryValues.ContainsKey(prop.Name))
+                {
+                    //TODO: parse
+                }
+                else
+                {
+                    var attr = Attribute.GetCustomAttribute(prop, typeof(DefaultValueIfNotPresentAttribute));
+                    if (attr is DefaultValueIfNotPresentAttribute dva)
+                        prop.SetValue(desktop, dva.DefaultValue);
+                    else
+                        prop.SetValue(desktop, null)
+                }
+            }
+        }
     }
 }

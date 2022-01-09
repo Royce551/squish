@@ -3,44 +3,45 @@ using System.Collections.Generic;
 
 namespace Squish.FreeDesktop;
 
-[AttributeUsage(AttributeTargets.Parameter)]
-internal class DefaultValueIfNotPresentAttribute<T> : Attribute
+[AttributeUsage(AttributeTargets.Property)]
+internal class DefaultValueIfNotPresentAttribute : Attribute
 {
-    public DefaultValueIfNotPresentAttribute(T defaultValue)
+    public DefaultValueIfNotPresentAttribute(object defaultValue)
     {
         DefaultValue = defaultValue;
     }
 
-    public T DefaultValue { get; } 
+    public object DefaultValue { get; } 
 }
 
-public record DesktopFile(
-    string Type,
-    string? Version,
-    LocaleString Name,
-    LocaleString? GenericName,
-    [DefaultValueIfNotPresent<bool>(false)]
-    bool NoDisplay,
-    LocaleString? Comment,
-    string? Icon,
-    [DefaultValueIfNotPresent<bool>(false)]
-    bool Hidden,
-    string[]? OnlyShowIn,
-    string[]? NotShowIn,
-    [DefaultValueIfNotPresent<bool>(false)]
-    bool DBusActivatable,
-    string? TryExec,
-    string? Exec,
-    string? Path,
-    bool? Terminal,
-    DesktopFileAction[]? Actions, //
-    string[]? MimeType,
-    string[]? Categories,
-    string[]? Implements,
-    LocaleString[]? Keywords,
-    Dictionary<string,string> UnknownDesktopEntryKeys,
-    Dictionary<string, string[]> UnknownGroups
-);
+public class DesktopFile
+{
+    string Type { get; set; }
+    string? Version { get; set; }
+    LocaleString Name { get; set; }
+    LocaleString? GenericName { get; set; }
+    [DefaultValueIfNotPresent(false)]
+    bool NoDisplay { get; set; }
+    LocaleString? Comment { get; set; }
+    string? Icon { get; set; }
+    [DefaultValueIfNotPresent(false)]
+    bool Hidden { get; set; }
+    string[]? OnlyShowIn { get; set; }
+    string[]? NotShowIn { get; set; }
+    [DefaultValueIfNotPresent(false)]
+    bool DBusActivatable { get; set; }
+    string? TryExec { get; set; }
+    string? Exec { get; set; }
+    string? Path { get; set; }
+    bool? Terminal { get; set; }
+    DesktopFileAction[]? Actions { get; set; } //
+    string[]? MimeType { get; set; }
+    string[]? Categories { get; set; }
+    string[]? Implements { get; set; }
+    LocaleString[]? Keywords { get; set; }
+    Dictionary<string, string> UnknownDesktopEntryKeys { get; set; }
+    Dictionary<string, string[]> UnknownGroups { get; set; }
+};
 
 public record DesktopFileAction(
     string Name,
