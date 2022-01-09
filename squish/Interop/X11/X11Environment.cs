@@ -1,19 +1,10 @@
-﻿using Squish.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Text;
-using System.Threading.Tasks;
-using TerraFX.Interop;
-using static TerraFX.Interop.Xlib.Xlib;
-using Squish.Services;
+﻿using static TerraFX.Interop.Xlib.Xlib;
 using TerraFX.Interop.Xlib;
 
-namespace Squish.Interop.X11
-{
-    public unsafe static class X11Environment
-    {/*
+namespace Squish.Interop.X11;
+
+public unsafe static class X11Environment
+{/*
         public List<IWindow> RunningWindows
         {
             get
@@ -30,43 +21,43 @@ namespace Squish.Interop.X11
             }
         }*/
 
-        public static Display* Display { get; }
-        public static Window DefaultRootWindow { get; }
-        public static int DefaultScreen { get; }
-        
+    public static Display* Display { get; }
+    public static Window DefaultRootWindow { get; }
+    public static int DefaultScreen { get; }
 
-        private Window rootWindow;
 
-        private static Thread eventLoopThread;
+    private Window rootWindow;
 
-        static X11WindowManager()
+    private static Thread eventLoopThread;
+
+    static X11WindowManager()
+    {
+        Display = XOpenDisplay(null);
+
+        DefaultScreen = XDefaultScreen(Display);
+
+        rootWindow = XRootWindow(Display, DefaultScreen);
+        DefaultRootWindow = XDefaultRootWindow(Display);
+
+        eventLoopThread = new Thread(() =>
         {
-            Display = XOpenDisplay(null);
-
-            DefaultScreen = XDefaultScreen(Display);
-
-            rootWindow = XRootWindow(Display, DefaultScreen);
-            DefaultRootWindow = XDefaultRootWindow(Display);
-
-            eventLoopThread = new Thread(() => 
+            while (true)
             {
-                while (true)
+                XEvent nextEvent;
+                XNextEvent(Display, &nextEvent);
+
+                switch (nextEvent.type)
                 {
-                    XEvent nextEvent;
-                    XNextEvent(Display, &nextEvent);
-
-                    switch (nextEvent.type) {
-                        case PropertyNotify:
-                            X11PropertyNotifyEventReceived?.Invoke(null, nextEvent.xproperty);
-                            break;
-                    }
-
+                    case PropertyNotify:
+                        X11PropertyNotifyEventReceived?.Invoke(null, nextEvent.xproperty);
+                        break;
                 }
-            });
 
-            eventLoopThread.Start();
-        }
+            }
+        });
 
-        public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
-   }
+        eventLoopThread.Start();
+    }
+
+    public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
 }

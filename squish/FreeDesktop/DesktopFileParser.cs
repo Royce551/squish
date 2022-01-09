@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Squish.FreeDesktop;
@@ -108,16 +104,23 @@ public static class DesktopFileParser
         return desktopFiles;
     }
 
-    public static DesktopFile? ParseFile(string path) 
+
+    /// <summary>
+    /// Reads and parses a Freedesktop .desktop file from the specified path.
+    /// </summary>
+    /// <param name="path"> Path of the .desktop file.</param>
+    /// <returns>Parsed desktop file</returns>
+    /// <exception cref="DesktopFileException">Thrown if file is invalid</exception>
+    public static DesktopFile ParseFile(string path) 
     {
         var x = "Hi";
         var lines = File.ReadAllLines(path);
         var groups = new Dictionary<string, Dictionary<string, string>>();
         var readingGroup = "";
         Dictionary<string, string>? readingValues = null;
-        foreach (var l in lines)
+        for (var i = 0; i < lines.Length; i++)
         {
-            var line = l.Trim();
+            var line = lines[i].Trim();
             if (line == "" || line.StartsWith('#'))
                 continue;
 
@@ -126,12 +129,11 @@ public static class DesktopFileParser
                 var newGroup = line[1..^1].Trim();
 
                 if (newGroup == readingGroup || groups.ContainsKey(newGroup))
-                    return null; 
+                    throw new DesktopFileException($"Duplicate group [{newGroup}] in line {i}");
 
                 if (readingValues is not null)
-                {
                     groups.Add(readingGroup, readingValues);
-                }
+                
 
                 readingGroup = newGroup; // SCARUTCHO
                 readingValues = new Dictionary<string, string>();
@@ -141,37 +143,72 @@ public static class DesktopFileParser
             if (readingValues is not null)
             {
                 var ind = line.IndexOf('=');
-                
+
                 if (ind == -1)
-                    return null;
+                    throw new DesktopFileException($"Invalid entry in line {i}: entry does not contain equals sign");
 
                 var (key, value) = (line[0..ind].Trim(), line[ind..].Trim());
+
+                if (readingValues.ContainsKey(key))
+                    throw new DesktopFileException($"Duplicate key {key} in group {readingGroup}, line {i}");
+
                 readingValues[key] = value;
             }
 
-            return null; //file is invalid
+            throw new DesktopFileException($"Invalid line {i}");
         }
 
-        var desktop = new DesktopFile();
+        var desktopFile = new DesktopFile();
 
-        if (groups.TryGetValue("Desktop Entry", out var desktopEntryValues))
+        if (groups.TryGetValue("Desktop Entry", out var values))
         {
-            
+            var nullCtx = new NullabilityInfoContext();
+
             foreach (var prop in typeof(DesktopFile).GetProperties())
             {
-                if (desktopEntryValues.ContainsKey(prop.Name))
+                var key = prop.Name;
+                
+                if (key.EndsWith(']')) 
+                    continue;
+
+                if (values.TryGetValue(prop.Name, out var value))
                 {
-                    //TODO: parse
+                    if (prop.PropertyType == typeof(string))
+                    {
+                        prop.SetValue(desktopFile, EscapeDesktopString(value));
+                    }
+                    else if (prop.PropertyType == typeof(string[]))
+                    {
+                        prop.SetValue(desktopFile, value.Split(';').Select(EscapeDesktopString).ToArray());
+                    }
+                    else if (prop.PropertyType == typeof(bool))
+                    {
+                        if (value is not "true" or "false")
+                            throw new DesktopFileException($"Invalid value {value} for key of type boolean {key}");
+                        prop.SetValue(desktopFile, value)
+                    }
+                    else if ()
                 }
                 else
                 {
                     var attr = Attribute.GetCustomAttribute(prop, typeof(DefaultValueIfNotPresentAttribute));
                     if (attr is DefaultValueIfNotPresentAttribute dva)
-                        prop.SetValue(desktop, dva.DefaultValue);
+                    {
+                        prop.SetValue(desktopFile, dva.DefaultValue);
+                    }
                     else
-                        prop.SetValue(desktop, null);
+                    {
+                        var nullInfo = nullCtx.Create(prop);
+                        if (nullInfo.ReadState == NullabilityState.Nullable)
+                            prop.SetValue(desktopFile, null);
+                        else
+                            throw new DesktopFileException($"Required parameter {key} missing");
+                    }
                 }
             }
         }
     }
+
+    static string EscapeDesktopString(string original) =>
+        original.Replace(@"\n", "\x0A").Replace(@"\s", " ").Replace(@"\r", "\x0D").Replace(@"\t", "\t").Replace(@"\\", @"\").Replace(@"\;", ";");
 }
