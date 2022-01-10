@@ -3,34 +3,19 @@ using TerraFX.Interop.Xlib;
 
 namespace Squish.Interop.X11;
 
-public unsafe static class X11Environment
-{/*
-        public List<IWindow> RunningWindows
-        {
-            get
-            {
-                var squishRunningWindows = new List<IWindow>();
-                var windows = (ulong[])X11Utilities.GetWindowProperty("_NET_CLIENT_LIST", display, &rootWindow);
+public unsafe class X11Environment : IEnvironment
+{
+    public Display* Display { get; }
+    public Window DefaultRootWindow { get; }
+    public int DefaultScreen { get; }
 
-                foreach (var windowId in windows)
-                {
-                    squishRunningWindows.Add(new X11Window(display, (nuint)windowId, rootWindow));
-                }
-
-                return squishRunningWindows;
-            }
-        }*/
-
-    public static Display* Display { get; }
-    public static Window DefaultRootWindow { get; }
-    public static int DefaultScreen { get; }
-
+    public List<IWindow> RunningWindows => throw new NotImplementedException();
 
     private Window rootWindow;
 
-    private static Thread eventLoopThread;
+    private Thread eventLoopThread;
 
-    static X11WindowManager()
+    public X11Environment()
     {
         Display = XOpenDisplay(null);
 
@@ -59,5 +44,6 @@ public unsafe static class X11Environment
         eventLoopThread.Start();
     }
 
-    public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
+    public event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
+    public event EventHandler? WindowsUpdated;
 }

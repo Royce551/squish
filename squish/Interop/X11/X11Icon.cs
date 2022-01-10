@@ -1,6 +1,6 @@
 namespace Squish.Interop.X11;
 
-class X11Icon
+public class X11Icon
 {
 
 }

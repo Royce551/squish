@@ -4,7 +4,7 @@ using static TerraFX.Interop.Xlib.Xlib;
 
 namespace Squish.Interop.X11;
 
-public struct WindowProperty<TProperty> : IDisposable, IEnumerable<TProperty>
+public unsafe struct WindowProperty<TProperty> : IDisposable, IEnumerable<TProperty>
         where TProperty : unmanaged
 {
     public WindowProperty(Atom type, int format, ulong itemCount, ulong remainingBytes, TProperty* data)

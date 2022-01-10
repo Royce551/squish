@@ -11,6 +11,7 @@
     <AvaloniaXaml Remove="Utilities\**" />
     <Compile Remove="Utilities\**" />
     <EmbeddedResource Remove="Utilities\**" />
+    <Folder Include="Models\" />
     <Folder Include="ViewModels\Background\" />
     <Folder Include="ViewModels\Widgetbar\" />
     <Folder Include="Views\Background\" />

@@ -11,7 +11,7 @@ public class App : Application
 {
     public static WindowManagementService Windows = new WindowManagementService();
 
-    public static IWindowManager WindowManager => Windows.WindowManager;
+    public static IEnvironment WindowManager => Windows.WindowManager;
 
     public override void Initialize()
     {

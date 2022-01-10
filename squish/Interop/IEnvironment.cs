@@ -1,6 +1,6 @@
 ﻿namespace Squish.Interop;
 
-public interface IWindowManager
+public interface IEnvironment
 {
     public List<IWindow> RunningWindows { get; }
 

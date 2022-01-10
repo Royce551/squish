@@ -42,7 +42,9 @@ public unsafe class X11Utilities
     {
         fixed (sbyte* pAtom = ToUtf8(atom))
         {
-            return XInternAtom(X11Environment.Display, pAtom, 0);
+            if (App.WindowManager is X11Environment x11Environment)
+                return XInternAtom(x11Environment.Display, pAtom, 0);
+            else throw new X11Exception("Cannot be used while not using X11 backend");
         }
     }
 
@@ -54,8 +56,14 @@ public unsafe class X11Utilities
         nuint nItems, bytesRemain;
         T* data;
 
-        X11Exception.ThrowForErrorCode(
-            XGetWindowProperty(X11Environment.Display,
+        if (App.WindowManager is not X11Environment x11Environment)
+            throw new X11Exception("Cannot be used while not using X11 backend");
+
+        X11Exception.ThrowForErrorCode
+        (
+            XGetWindowProperty
+            (
+                x11Environment.Display,
                 window,
                 property.AsAtom(),
                 offset,
@@ -66,8 +74,9 @@ public unsafe class X11Utilities
                 &formatReturn,
                 &nItems,
                 &bytesRemain,
-                (byte**)&data)
-            );
+                (byte**)&data
+            )
+         );
 
         if (sizeof(T) * 8 != formatReturn)
             throw new X11Exception($"Wrong type attribute given, expected type which is {formatReturn} bits large (the format is {sizeof(T) * 8} bits of soze)");
@@ -78,6 +87,9 @@ public unsafe class X11Utilities
 
     public static void SendMessageToRootWindow(string message, Window* window, nint data0, nint data1 = 0, nint data2 = 0, nint data3 = 0, nint data4 = 0)
     {
+        if (App.WindowManager is not X11Environment x11Environment)
+            throw new X11Exception("Cannot be used while not using X11 backend");
+
         var @event = new XEvent()
         {
             xclient =
@@ -102,6 +114,6 @@ public unsafe class X11Utilities
                 }
         };
         X11Exception.ThrowForErrorCode(
-            XSendEvent(X11Environment.Display, *window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
+            XSendEvent(x11Environment.Display, *window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
     }
 }

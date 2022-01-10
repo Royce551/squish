@@ -13,21 +13,27 @@ public unsafe class X11Window : IWindow
         }
     }
 
-    Window window;
+    public byte[]? Icon => throw new NotImplementedException();
 
-    public X11Window(Window windowId)
+    public bool IsFocused { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+    private readonly Window window;
+    private readonly X11Environment x11Environment;
+
+    public X11Window(Window window, X11Environment environment)
     {
-        window = windowId;
+        this.window = window;
+        this.x11Environment = environment;
 
         XWindowAttributes attrs;
-        XGetWindowAttributes(X11Environment.Display, windowId, &attrs);
-        XSelectInput(X11Environment.Display, windowId, attrs.your_event_mask | PropertyChangeMask | StructureNotifyMask | SubstructureNotifyMask);
+        XGetWindowAttributes(x11Environment.Display, window, &attrs);
+        XSelectInput(x11Environment.Display, window, attrs.your_event_mask | PropertyChangeMask | StructureNotifyMask | SubstructureNotifyMask);
 
-        X11Environment.X11PropertyNotifyReceived += (_, xevent) =>
+        x11Environment.X11PropertyNotifyReceived += (_, xevent) =>
         {
             if (xevent.window != this.window) return;
 
-            switch (new string(XGetAtomName(X11Environment.Display, xevent.atom)))
+            switch (new string(XGetAtomName(x11Environment.Display, xevent.atom)))
             {
                 case "_NET_WM_NAME":
                     TitleChanged?.Invoke(this, this.Title);
@@ -36,8 +42,8 @@ public unsafe class X11Window : IWindow
                     IconChanged?.Invoke(this, null /* TODO: this.Icon */);
                     break;
             }
-        }
-        }
+        };
+    }
 
     public event EventHandler<string>? TitleChanged;
     public event EventHandler<X11Icon>? IconChanged;
