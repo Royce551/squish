@@ -8,9 +8,12 @@ public unsafe sealed class X11Exception : Exception
     {
         if (errorCode != Success)
         {
+            if (App.WindowManager is not X11Environment x11Environment)
+                throw new X11Exception("Cannot be used while not using X11 backend");
+
             const int BufferLength = 256;
             sbyte* str = stackalloc sbyte[BufferLength];
-            var result = XGetErrorText(X11Environment.Display, errorCode, str, BufferLength);
+            var result = XGetErrorText(x11Environment.Display, errorCode, str, BufferLength);
 
             if (result == Success)
             {

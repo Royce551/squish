@@ -11,13 +11,13 @@ public unsafe struct WindowProperty<TProperty> : IDisposable, IEnumerable<TPrope
     {
         Type = type;
         Format = format;
-        ItemCount = itemCount;
+        ItemCount = (int)itemCount;
         RemainingBytes = remainingBytes;
         Data = data;
     }
     public Atom Type { get; }
     public int Format { get; }
-    public ulong ItemCount { get; }
+    public int ItemCount { get; }
     public ulong RemainingBytes { get; }
     public TProperty* Data { get; }
     public void Dispose()
@@ -29,7 +29,7 @@ public unsafe struct WindowProperty<TProperty> : IDisposable, IEnumerable<TPrope
     {
         get 
         {
-            return data[i];
+            return Data[i];
         }
     }
     
@@ -40,24 +40,29 @@ public unsafe struct WindowProperty<TProperty> : IDisposable, IEnumerable<TPrope
     IEnumerator IEnumerable.GetEnumerator() => new Enumerator(this);
     public struct Enumerator : IEnumerator<TProperty>
     {
-        WindowProperty<TProperty> windowProperty;
-        ulong index = ulong.MaxValue;
+        private WindowProperty<TProperty> windowProperty;
+        private int index = int.MaxValue;
+
         internal Enumerator(in WindowProperty<TProperty> windowProp)
         {
             windowProperty = windowProp;
         }
+
         public void Dispose()
         {
         }
+
         public bool MoveNext()
         {
             return index++ < windowProperty.ItemCount;
         }
+
         public void Reset()
         {
-            index = ulong.MaxValue;
+            index = int.MaxValue;
         }
+
         public TProperty Current => windowProperty[index];
-        public object IEnumerator.Current => Current;
+        object IEnumerator.Current => Current;
     }
 }

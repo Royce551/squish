@@ -34,7 +34,7 @@ public unsafe class X11Environment : IEnvironment
                 switch (nextEvent.type)
                 {
                     case PropertyNotify:
-                        X11PropertyNotifyEventReceived?.Invoke(null, nextEvent.xproperty);
+                        X11PropertyNotifyReceived?.Invoke(null, nextEvent.xproperty);
                         break;
                 }
 
