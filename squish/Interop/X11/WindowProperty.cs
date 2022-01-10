@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using TerraFX.Interop.Xlib;
 using static TerraFX.Interop.Xlib.Xlib;
 

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Globalization;
 
 namespace Squish.FreeDesktop;
 
@@ -16,36 +15,36 @@ internal class DefaultValueIfNotPresentAttribute : Attribute
 
 public class DesktopFile
 {
-    public string? Type { get; set; }
-    public string? Version { get; set; }
-    public LocaleString? Name { get; set; }
-    public LocaleString? GenericName { get; set; }
+    public string? Type { get; init; }
+    public string? Version { get; init; }
+    public LocaleString? Name { get; init; }
+    public LocaleString? GenericName { get; init; }
 
     [DefaultValueIfNotPresent(false)]
-    public bool NoDisplay { get; set; }
+    public bool NoDisplay { get; init; }
 
-    public LocaleString? Comment { get; set; }
-    public string? Icon { get; set; }
-
-    [DefaultValueIfNotPresent(false)]
-    public bool Hidden { get; set; }
-    public string[]? OnlyShowIn { get; set; }
-    public string[]? NotShowIn { get; set; }
+    public LocaleString? Comment { get; init; }
+    public string? Icon { get; init; }
 
     [DefaultValueIfNotPresent(false)]
-    public bool DBusActivatable { get; set; }
+    public bool Hidden { get; init; }
+    public string[]? OnlyShowIn { get; init; }
+    public string[]? NotShowIn { get; init; }
 
-    public string? TryExec { get; set; }
-    public string? Exec { get; set; }
-    public string? Path { get; set; }
-    public bool? Terminal { get; set; }
-    public DesktopFileAction[]? Actions { get; set; } //
-    public string[]? MimeType { get; set; }
-    public string[]? Categories { get; set; }
-    public string[]? Implements { get; set; }
-    public LocaleString[]? Keywords { get; set; }
-    public Dictionary<string, string>? UnknownDesktopEntryKeys { get; set; }
-    public Dictionary<string, string[]>? UnknownGroups { get; set; }
+    [DefaultValueIfNotPresent(false)]
+    public bool DBusActivatable { get; init; }
+
+    public string? TryExec { get; init; }
+    public string? Exec { get; init; }
+    public string? Path { get; init; }
+    public bool? Terminal { get; init; }
+    public DesktopFileAction[]? Actions { get; init; } //
+    public string[]? MimeType { get; init; }
+    public string[]? Categories { get; init; }
+    public string[]? Implements { get; init; }
+    public LocaleStrings? Keywords { get; init; }
+    public Dictionary<string, string>? UnknownDesktopEntryKeys { get; init; }
+    public Dictionary<string, string[]>? UnknownGroups { get; init; }
 };
 
 public record DesktopFileAction
@@ -54,3 +53,26 @@ public record DesktopFileAction
     string? Icon,
     string? Exec
 );
+
+public class LocaleString : Dictionary<CultureInfo, string>
+{
+    public string Default { get; }
+    public LocaleString(string @default, IDictionary<CultureInfo, string> dict) : base(dict)
+    {
+        Default = @default;
+    }
+}
+
+public class LocaleStrings : Dictionary<CultureInfo, string[]>
+{
+    public string Default { get; }
+    public LocaleStrings(string @default, IDictionary<CultureInfo, string[]> dict) : base(dict)
+    {
+        Default = @default;
+    }
+}
+
+public class DesktopFileException : Exception
+{
+    public DesktopFileException(string message) : base(message) { }
+}
