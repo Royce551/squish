@@ -198,6 +198,23 @@ public static class DesktopFileParser
                             throw new DesktopFileException($"Invalid value {value} for key of type boolean {key}");
                         prop.SetValue(desktopFile, value);
                     }
+                    else if (prop.PropertyType == typeof(DesktopFileAction[]))
+                    {
+                        var actionStrings = value.Split(';').Select(EscapeDesktopString);
+                        var actions = new List<DesktopFileAction>();
+                        foreach (var actStr in actionStrings)
+                        {
+                            if (groups.TryGetValue($"Desktop Action {actStr}", out var actionDict))
+                            {
+                                actions.Add(new(actionDict.GetValueOrDefault("Name") ?? throw new DesktopFileException($"Action {actStr} is missing required key Value"), 
+                                    actionDict.GetValueOrDefault("Icon"), actionDict.GetValueOrDefault("Exec")));
+                            }
+                            else
+                            {
+                                throw new DesktopFileException($"Action {actStr} has no matching group");
+                            }
+                        }
+                    }
 
                     //Locale strings
                     var regex = new Regex($@"{key}\[([A-z_@])+\]");
@@ -232,7 +249,10 @@ public static class DesktopFileParser
                     }
                 }
             }
+
+            return desktopFile;
         }
+        throw new DesktopFileException("Invalid desktop file is missing Desktop Entry group");
     }
 
 
