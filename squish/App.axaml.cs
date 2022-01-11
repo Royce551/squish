@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Squish.Interop;
+using Squish.Models;
 using Squish.Services;
 using Squish.Views.Taskbar;
 
@@ -12,6 +13,8 @@ public class App : Application
     public static WindowManagementService Windows = new WindowManagementService();
 
     public static IWindowManager WindowManager => Windows.WindowManager;
+
+    public static ConfigurationFile Config => Program.Config;
 
     public override void Initialize()
     {
