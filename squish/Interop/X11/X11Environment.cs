@@ -77,6 +77,11 @@ public unsafe class X11Environment : IWindowManager
 
     public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
 
+    public IWindow? WindowForWindowHandle(IntPtr handle)
+    {
+        return RunningWindows.FirstOrDefault(window => (Window) window.WindowHandle == (Window) handle) ?? new X11Window((Window) handle);
+    }
+
     public event EventHandler<IWindow>? WindowOpened;
     public event EventHandler<IWindow>? WindowClosed;
     

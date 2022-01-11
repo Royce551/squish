@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Squish.Interop;
+using Squish.Interop.X11;
 using Squish.Services;
 using Squish.Views.Taskbar;
 
@@ -45,6 +46,8 @@ public class App : Application
 
     private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
     {
+        X11Exception.InitialiseExceptionHandling();
+
         LoggingService.Log("Starting desktop...", Severity.Info);
         new Taskbar().Show();
     }

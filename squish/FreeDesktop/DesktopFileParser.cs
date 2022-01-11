@@ -66,44 +66,32 @@ public static class DesktopFileParser
         +--------+--------+--------+--------+
     */
 
-    public static List<string> DefaultSearchPaths() 
+    private static List<string> DefaultSearchPaths() 
     {
-        var searchPaths = new List<string>();
-        searchPaths.Add(Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "/.local/share/applications"));
+        var searchPaths = new List<string>
+            {Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "/.local/share/applications")};
 
-        foreach (string path in Environment.GetEnvironmentVariable("XDG_DATA_DIRS")?.Split(":") ?? new[] { "/usr/local/share", "/usr/share" }) 
-        {
-            searchPaths.Add(Path.Join(path, "applications"));
-        }
+        searchPaths.AddRange(
+            (Environment.GetEnvironmentVariable("XDG_DATA_DIRS")?.Split(":") ??
+             new[] {"/usr/local/share", "/usr/share"}).Select(path => Path.Join(path, "applications")));
         return searchPaths;
     }
 
     public static List<DesktopFile> Applications(List<string>? searchPaths = null) 
     {
-        //TODO: filesyste, listener for desktop files
-        if (searchPaths == null) 
-        {
-            searchPaths = DefaultSearchPaths();
-        }
+        //TODO: filesystem listener for desktop files
+        searchPaths ??= DefaultSearchPaths();
 
-        var desktopFiles = new List<DesktopFile>();
         var seenDesktopFiles = new HashSet<string>();
-        foreach (string searchPath in searchPaths)
-        {
-            foreach (var file in Directory.EnumerateFiles(searchPath, "*", new EnumerationOptions() { RecurseSubdirectories = true })) 
-            {
-                var desktopEntry = Path.GetFileNameWithoutExtension(file);
-                if (!seenDesktopFiles.Add(desktopEntry))
-                { 
-                    continue;
-                }
-
-                var desktopFile = ParseFile(file);
-                if (desktopFile == null) continue;
-                desktopFiles.Add(desktopFile);
-            }
-        }
-        return desktopFiles;
+        return (searchPaths
+            .SelectMany(
+                searchPath =>
+                    Directory.EnumerateFiles(searchPath, "*", new EnumerationOptions() {RecurseSubdirectories = true}),
+                (searchPath, file) => new {searchPath, file})
+            .Select(@t => new {@t, desktopEntry = Path.GetFileNameWithoutExtension(@t.file)})
+            .Where(@t => seenDesktopFiles.Add(@t.desktopEntry))
+            .Select(@t => ParseFile(@t.@t.file))
+            .Where(desktopFile => desktopFile != null)).ToList();
     }
 
 
