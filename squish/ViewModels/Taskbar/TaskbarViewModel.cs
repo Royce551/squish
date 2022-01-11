@@ -11,24 +11,20 @@ public class TaskbarViewModel : ViewModelBase
 {
     public ObservableCollection<IWindow> RunningWindows { get; set; } = new();
 
-    public IWindow ActiveWindow
+    public static IWindow? ActiveWindow
     {
-        get => RunningWindows.First(x => x.IsFocused == true);
-        set
-        {
-            if (value is not null) FocusWindowCommand(value);
-        }
+        get => App.WindowManager.FocusedWindow;
+        set => App.WindowManager.FocusedWindow = value;
     }
 
     public TaskbarViewModel()
     {
-        App.WindowManager.WindowsUpdated += WindowManager_WindowsUpdated;
+        App.WindowManager.WindowOpened += WindowManager_WindowsUpdated;
+        App.WindowManager.WindowClosed += WindowManager_WindowsUpdated;
         Update();
     }
 
-    private void WindowManager_WindowsUpdated(object? sender, EventArgs e) => Update();
-
-    public void FocusWindowCommand(IWindow window) => window.IsFocused = true;
+    private void WindowManager_WindowsUpdated(object? sender, IWindow e) => Update();
 
     public void Update()
     {
@@ -60,6 +56,7 @@ public class BytesToImageConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        if (value is null) return null;
         if (value is byte[] x)
         {
             return new Bitmap(new MemoryStream(x));

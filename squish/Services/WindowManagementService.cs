@@ -1,4 +1,5 @@
 ﻿using Squish.Interop;
+using Squish.Interop.X11;
 
 namespace Squish.Services;
 
@@ -12,7 +13,7 @@ public class WindowManagementService
         if (OperatingSystem.IsLinux())
         {
             LoggingService.Log("Using X11 window manager", Severity.Info);
-            WindowManager = new X11WindowManager();
+            WindowManager = new X11Environment();
             return;
         }
         throw new Exception("Platform not supported");

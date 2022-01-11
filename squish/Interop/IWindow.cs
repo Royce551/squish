@@ -2,9 +2,9 @@
 
 public interface IWindow
 {
+    public Object WindowHandle { get; }
+    
     public string Title { get; }
 
     public byte[]? Icon { get; }
-
-    public bool IsFocused { get; set; }
 }

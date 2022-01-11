@@ -10,7 +10,7 @@ public unsafe sealed class X11Exception : Exception
         {
             const int BufferLength = 256;
             sbyte* str = stackalloc sbyte[BufferLength];
-            var result = XGetErrorText(X11Environment.Display, errorCode, str, BufferLength);
+            var result = XGetErrorText(X11Info.Display, errorCode, str, BufferLength);
 
             if (result == Success)
             {

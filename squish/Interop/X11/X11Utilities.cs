@@ -11,7 +11,7 @@ public static unsafe class X11Extensions
     {
         //TODO: Check if format = UTF8_STRING or XA_STRING
         //TODO: Convert the information in data to a string
-        if (windowProperty.Type != XA_STRING || windowProperty.Type != AsAtom("UTF8_STRING"))
+        if (windowProperty.Type != XA_STRING && windowProperty.Type != "UTF8_STRING".AsAtom())
         {
             throw new ArgumentException("Not a string", nameof(windowProperty));
         }
@@ -42,7 +42,7 @@ public unsafe class X11Utilities
     {
         fixed (sbyte* pAtom = ToUtf8(atom))
         {
-            return XInternAtom(X11Environment.Display, pAtom, 0);
+            return XInternAtom(X11Info.Display, pAtom, 0);
         }
     }
 
@@ -55,7 +55,7 @@ public unsafe class X11Utilities
         T* data;
 
         X11Exception.ThrowForErrorCode(
-            XGetWindowProperty(X11Environment.Display,
+            XGetWindowProperty(X11Info.Display,
                 window,
                 property.AsAtom(),
                 offset,
@@ -69,8 +69,8 @@ public unsafe class X11Utilities
                 (byte**)&data)
             );
 
-        if (sizeof(T) * 8 != formatReturn)
-            throw new X11Exception($"Wrong type attribute given, expected type which is {formatReturn} bits large (the format is {sizeof(T) * 8} bits of soze)");
+        // if (sizeof(T) * 8 != formatReturn)
+            // throw new X11Exception($"Wrong type attribute given, expected type which is {formatReturn} bits large (the format is {sizeof(T) * 8} bits of soze)");
 
 
         return new WindowProperty<T>(typeReturn, formatReturn, nItems, bytesRemain, data);
@@ -102,6 +102,6 @@ public unsafe class X11Utilities
                 }
         };
         X11Exception.ThrowForErrorCode(
-            XSendEvent(X11Environment.Display, *window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
+            XSendEvent(X11Info.Display, *window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
     }
 }
