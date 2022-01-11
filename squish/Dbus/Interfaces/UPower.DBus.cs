@@ -4,6 +4,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Tmds.DBus;
 
+// ReSharper disable All
+
 [assembly: InternalsVisibleTo(Tmds.DBus.Connection.DynamicAssemblyName)]
 namespace UPower.DBus
 {

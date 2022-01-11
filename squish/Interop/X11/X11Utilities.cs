@@ -76,7 +76,7 @@ public unsafe class X11Utilities
         return new WindowProperty<T>(typeReturn, formatReturn, nItems, bytesRemain, data);
     }
 
-    public static void SendMessageToRootWindow(string message, Window* window, nint data0, nint data1 = 0, nint data2 = 0, nint data3 = 0, nint data4 = 0)
+    public static void SendMessageToRootWindow(string message, Window window, nint data0, nint data1 = 0, nint data2 = 0, nint data3 = 0, nint data4 = 0)
     {
         var @event = new XEvent()
         {
@@ -86,7 +86,7 @@ public unsafe class X11Utilities
                     serial = 0,
                     send_event = True,
                     message_type = message.AsAtom(),
-                    window = *window,
+                    window = window,
                     format = 32,
                     data =
                     {
@@ -102,6 +102,6 @@ public unsafe class X11Utilities
                 }
         };
         X11Exception.ThrowForErrorCode(
-            XSendEvent(X11Info.Display, *window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
+            XSendEvent(X11Info.Display, window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
     }
 }

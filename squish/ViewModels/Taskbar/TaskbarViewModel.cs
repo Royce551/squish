@@ -28,9 +28,9 @@ public class TaskbarViewModel : ViewModelBase
 
     public void Update()
     {
-        RunningWindows = new(App.WindowManager.RunningWindows);
+        RunningWindows = new ObservableCollection<IWindow>(App.WindowManager.RunningWindows);
         this.RaisePropertyChanged(nameof(RunningWindows));
-        this.RaisePropertyChanged(nameof(ActiveWindow));
+        // this.RaisePropertyChanged(nameof(ActiveWindow));
     }
 }
 
@@ -56,7 +56,11 @@ public class BytesToImageConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is null) return null;
+        if (value is null) return new Bitmap("/usr/share/icons/hicolor/128x128/apps/microsoft-edge.png");
+        if (value is Bitmap b)
+        {
+            return b;
+        }
         if (value is byte[] x)
         {
             return new Bitmap(new MemoryStream(x));

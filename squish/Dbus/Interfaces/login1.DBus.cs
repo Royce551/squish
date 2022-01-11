@@ -4,6 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Tmds.DBus;
 
+#pragma warning disable
+// ReSharper disable All
+
 [assembly: InternalsVisibleTo(Tmds.DBus.Connection.DynamicAssemblyName)]
 namespace login1.DBus
 {

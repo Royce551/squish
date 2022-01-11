@@ -90,8 +90,6 @@ public unsafe class X11Environment : IWindowManager
             return activeWindow.ItemCount == 0 ? null : RunningWindows.Find(window => (Window) window.WindowHandle == activeWindow[0]);
         }
 
-        set {
-            //TODO: Implement
-        }
+        set => X11Utilities.SendMessageToRootWindow("_NET_ACTIVE_WINDOW", (Window) (value?.WindowHandle ?? Window.NULL), 2, CurrentTime);
     }
 }
