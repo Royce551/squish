@@ -5,8 +5,7 @@ namespace Squish.Interop.X11;
 
 public unsafe class X11Environment : IEnvironment
 {
-    private static Thread eventLoopThread;
-
+    private Thread eventLoopThread;
     public X11Environment()
     {
         var dpy = X11Info.Display;
