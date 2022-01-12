@@ -45,6 +45,8 @@ public class DesktopFile
     public LocaleStrings? Keywords { get; init; }
     public Dictionary<string, string>? UnknownDesktopEntryKeys { get; init; }
     public Dictionary<string, string[]>? UnknownGroups { get; init; }
+    
+    //TODO: Launch function to launch a desktop file?
 };
 
 public record DesktopFileAction

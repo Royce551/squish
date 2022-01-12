@@ -31,6 +31,8 @@ public class TaskbarViewModel : ViewModelBase
         RunningWindows = new ObservableCollection<IWindow>(App.WindowManager.RunningWindows);
         this.RaisePropertyChanged(nameof(RunningWindows));
         // this.RaisePropertyChanged(nameof(ActiveWindow));
+        
+        
     }
 }
 

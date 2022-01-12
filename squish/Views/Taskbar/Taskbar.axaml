@@ -16,7 +16,7 @@
 		<vm:BytesToImageConverter x:Key="BytesToImageConverter"/>
 	</Window.Resources>
 	
-	<Border Background="{StaticResource ForegroundColor}" CornerRadius="4" PointerPressed="Background_PointerPressed">
+	<Border Background="{StaticResource ForegroundColor}" CornerRadius="4">
 		<Panel>
 			<ListBox HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectionMode="AlwaysSelected" SelectedItem="{Binding ActiveWindow}" Items="{Binding RunningWindows}" Background="Transparent">
 				<ListBox.ItemTemplate>
