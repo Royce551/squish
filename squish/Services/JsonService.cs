@@ -13,7 +13,8 @@ public static class JsonService
     {
         if (!File.Exists(path))
         {
-            await WriteAsync<T>(path);
+            var x = new T();
+            await WriteAsync(path, x);
         }
 
         using var jsonString = new FileStream(path, FileMode.OpenOrCreate);
@@ -22,9 +23,9 @@ public static class JsonService
         else throw new Exception(""); // TODO: exception message
     }
 
-    public static async Task WriteAsync<T>(string path)
+    public static async Task WriteAsync(string path, object thing)
     {
-        var jsonString = JsonSerializer.Serialize(typeof(T));
+        var jsonString = JsonSerializer.Serialize(thing);
         await File.WriteAllTextAsync(path, jsonString);
     }
 }
