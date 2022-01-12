@@ -77,23 +77,21 @@ public static class DesktopFileParser
         return searchPaths;
     }
 
-    public static List<DesktopFile> Applications(List<string>? searchPaths = null) 
+    public static async Task<DesktopFile[]> Applications(IEnumerable<string>? searchPaths = null) 
     {
         //TODO: filesystem listener for desktop files
         searchPaths ??= DefaultSearchPaths();
 
         var seenDesktopFiles = new HashSet<string>();
-        return (searchPaths
+        return await Task.WhenAll(searchPaths
             .SelectMany(
                 searchPath =>
                     Directory.EnumerateFiles(searchPath, "*", new EnumerationOptions() {RecurseSubdirectories = true}),
-                (searchPath, file) => new {searchPath, file})
-            .Select(@t => new {@t, desktopEntry = Path.GetFileNameWithoutExtension(@t.file)})
-            .Where(@t => seenDesktopFiles.Add(@t.desktopEntry))
-            .Select(@t => ParseFile(@t.@t.file))
-            .Where(desktopFile => desktopFile != null)).ToList();
+                        (searchPath, file) => (searchPath, file))
+            .Select(spf => (spf, desktopEntry: Path.GetFileNameWithoutExtension(spf.file)))
+            .Where(t => seenDesktopFiles.Add(t.desktopEntry))
+            .Select(t => ParseFile(t.spf.file)));    
     }
-
 
     /// <summary>
     /// Reads and parses a Freedesktop .desktop file from the specified path.
@@ -101,9 +99,9 @@ public static class DesktopFileParser
     /// <param name="path"> Path of the .desktop file.</param>
     /// <returns>Parsed desktop file</returns>
     /// <exception cref="DesktopFileException">Thrown if file is invalid</exception>
-    public static DesktopFile ParseFile(string path) 
+    public static async Task<DesktopFile> ParseFile(string path) 
     {
-        var lines = File.ReadAllLines(path);
+        var lines = await File.ReadAllLinesAsync(path);
         var groups = new Dictionary<string, Dictionary<string, string>>();
         var readingGroup = "";
         Dictionary<string, string>? readingValues = null;
@@ -124,7 +122,7 @@ public static class DesktopFileParser
                     groups.Add(readingGroup, readingValues);
                 
 
-                readingGroup = newGroup; // SCARUTCHO
+                readingGroup = newGroup;
                 readingValues = new Dictionary<string, string>();
                 continue;
             }
@@ -194,7 +192,8 @@ public static class DesktopFileParser
                         {
                             if (groups.TryGetValue($"Desktop Action {actStr}", out var actionDict))
                             {
-                                actions.Add(new(actionDict.GetValueOrDefault("Name") ?? throw new DesktopFileException($"Action {actStr} is missing required key Value"), 
+                                actions.Add(new(actionDict.GetValueOrDefault("Name") ?? 
+                                    throw new DesktopFileException($"Action {actStr} is missing required key Value"), 
                                     actionDict.GetValueOrDefault("Icon"), actionDict.GetValueOrDefault("Exec")));
                             }
                             else
