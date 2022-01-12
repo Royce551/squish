@@ -3,7 +3,7 @@ using TerraFX.Interop.Xlib;
 
 namespace Squish.Interop.X11;
 
-public unsafe class X11Environment : IWindowManager
+public unsafe class X11Environment : IEnvironment
 {
     private static Thread eventLoopThread;
 
@@ -77,7 +77,7 @@ public unsafe class X11Environment : IWindowManager
 
     public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
 
-    public IWindow? WindowForWindowHandle(IntPtr handle)
+    public IWindow? GetWindowForWindowHandle(IntPtr handle)
     {
         return RunningWindows.FirstOrDefault(window => (Window) window.WindowHandle == (Window) handle) ?? new X11Window((Window) handle);
     }

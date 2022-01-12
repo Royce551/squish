@@ -5,7 +5,7 @@ namespace Squish.Interop;
 
 public interface IWindow
 {
-    public Object WindowHandle { get; }
+    public object WindowHandle { get; }
     
     public string Title { get; }
 

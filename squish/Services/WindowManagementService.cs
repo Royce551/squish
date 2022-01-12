@@ -5,7 +5,7 @@ namespace Squish.Services;
 
 public class WindowManagementService
 {
-    public IWindowManager WindowManager { get; private set; }
+    public IEnvironment WindowManager { get; private set; }
 
     public WindowManagementService()
     {
