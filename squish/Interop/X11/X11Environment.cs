@@ -5,7 +5,7 @@ namespace Squish.Interop.X11;
 
 public unsafe class X11Environment : IEnvironment
 {
-    private Thread eventLoopThread;
+    private readonly Thread eventLoopThread;
     public X11Environment()
     {
         var dpy = X11Info.Display;
@@ -15,7 +15,6 @@ public unsafe class X11Environment : IEnvironment
             {
                 XEvent nextEvent;
                 XNextEvent(X11Info.Display, &nextEvent);
-
                 switch (nextEvent.type)
                 {
                     case PropertyNotify:
@@ -23,7 +22,6 @@ public unsafe class X11Environment : IEnvironment
                         break;
                 }
             }
-            // ReSharper disable once FunctionNeverReturns
         });
 
         eventLoopThread.Start();

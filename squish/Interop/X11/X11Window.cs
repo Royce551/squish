@@ -11,7 +11,7 @@ namespace Squish.Interop.X11;
 
 public unsafe class X11Window : IWindow
 {
-    Window window;
+    readonly Window window;
     public object WindowHandle => window;
 
     public string Title

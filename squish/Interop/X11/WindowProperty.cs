@@ -29,7 +29,7 @@ public struct WindowProperty<TProperty> : IDisposable, IEnumerable<TProperty>
     
     public unsafe TProperty this[int i] => Data[i];
 
-    public Enumerator GetEnumerator() => new Enumerator(this);
+    public Enumerator GetEnumerator() => new(this);
     
     IEnumerator<TProperty> IEnumerable<TProperty>.GetEnumerator() => new Enumerator(this);
     
@@ -37,7 +37,7 @@ public struct WindowProperty<TProperty> : IDisposable, IEnumerable<TProperty>
     
     public struct Enumerator : IEnumerator<TProperty>
     {
-        WindowProperty<TProperty> windowProperty;
+        readonly WindowProperty<TProperty> windowProperty;
         
         int index = -1;
         

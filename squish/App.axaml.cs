@@ -11,7 +11,7 @@ namespace Squish;
 
 public class App : Application
 {
-    public static WindowManagementService Windows = new WindowManagementService();
+    public static readonly WindowManagementService Windows = new();
 
     public static IEnvironment WindowManager => Windows.WindowManager;
 
