@@ -4,7 +4,10 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Tmds.DBus;
 
-// ReSharper disable All
+#nullable disable
+
+// TODO: check which types here should be nullable and annotate them accordingly
+// error, however it is possible other things here can be null (such as return values)
 
 [assembly: InternalsVisibleTo(Tmds.DBus.Connection.DynamicAssemblyName)]
 namespace UPower.DBus

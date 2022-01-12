@@ -22,7 +22,7 @@ public unsafe class X11Window : IWindow
             {
                 return X11Utilities.GetWindowProperty<sbyte>("_NET_WM_NAME", window, "UTF8_STRING".AsAtom()).AsString();
             }
-            catch (X11Exception e)
+            catch (X11Exception)
             {
                 return "";
             }
@@ -156,5 +156,5 @@ public unsafe class X11Window : IWindow
     }
 
     public event EventHandler<string>? TitleChanged;
-    public event EventHandler<Bitmap>? IconChanged;
+    public event EventHandler<Bitmap?>? IconChanged;
 }

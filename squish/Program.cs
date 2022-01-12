@@ -7,8 +7,9 @@ namespace Squish;
 
 class Program
 {
-    public static ConfigurationFile Config;
-
+    public static ConfigurationFile Config = default!; 
+    //realistically this can't be null since it's set right at the start
+    
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
