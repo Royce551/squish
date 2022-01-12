@@ -9,7 +9,7 @@ namespace Squish.ViewModels.Taskbar;
 
 public class TaskbarViewModel : ViewModelBase
 {
-    public ObservableCollection<IWindow> RunningWindows { get; set; } = new();
+    public ObservableCollection<IWindow> RunningWindows { get; set; } = new(App.WindowManager.RunningWindows);
 
     public static IWindow? ActiveWindow
     {
@@ -19,21 +19,15 @@ public class TaskbarViewModel : ViewModelBase
 
     public TaskbarViewModel()
     {
-        App.WindowManager.WindowOpened += WindowManager_WindowsUpdated;
-        App.WindowManager.WindowClosed += WindowManager_WindowsUpdated;
-        Update();
+        App.WindowManager.WindowOpened += WindowManager_WindowOpened;
+        App.WindowManager.WindowClosed += WindowManager_WindowClosed; // TODO: if the taskbar gets restarted this might leak memory
     }
 
-    private void WindowManager_WindowsUpdated(object? sender, IWindow e) => Update();
+    private void WindowManager_WindowClosed(object? sender, IWindow e) => RunningWindows.Remove(e);
 
-    public void Update()
-    {
-        RunningWindows = new ObservableCollection<IWindow>(App.WindowManager.RunningWindows);
-        this.RaisePropertyChanged(nameof(RunningWindows));
-        // this.RaisePropertyChanged(nameof(ActiveWindow));
-        
-        
-    }
+
+    private void WindowManager_WindowOpened(object? sender, IWindow e) => RunningWindows.Add(e);
+
 }
 
 public class BoolToOpacityConverter : IValueConverter

@@ -35,9 +35,4 @@
       <HintPath>Dependencies\SIADL.Avalonia.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <None Update="jacket.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
 </Project>
