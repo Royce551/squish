@@ -1,49 +1,21 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Avalonia.Media.Imaging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Squish.Interop.Mock
-//{
-//    public class MockWindow : IWindow
-//    {
-//        public string Title { get; }
+namespace Squish.Interop.Mock;
 
-//        public byte[]? Icon { get; }
+public class MockWindow : IWindow
+{
+    public object WindowHandle => null;
 
-//        private bool isFocused = false;
-//        public bool IsFocused
-//        {
-//            get => isFocused;
-//            set
-//            {
-//                bool wasWindowFound = false;
-//                foreach (var window in windowManager.RunningWindows)
-//                {
-//                    if (window.Id == id)
-//                    {
-//                        window.IsActiveWindow = true;
-//                        wasWindowFound = true;
-//                    }
-//                    else
-//                    {
-//                        window.IsActiveWindow = false;
-//                    }
-//                }
-//                windowManager.WindowsUpdated?.Invoke(null, EventArgs.Empty);
-//                if (!wasWindowFound) throw new InvalidOperationException("can't focus a window that doesn't exist");
-//            }
-//        }
+    public string Title => "i love catgirls";
 
-//        private IWindowManager windowManager;
+    public Bitmap? Icon => null;
 
-//        public MockWindow(IWindowManager windowManager, string title, byte[] icon, bool isFocused)
-//        {
-//            this.windowManager = windowManager;
-//            Title = title;
-//            Icon = icon;
-//            IsFocused = isFocused;
-//        }
-//    }
-//}
+    public IWindow.ScreenMargins ReservedScreenArea { set { /*ignored*/} }
+    public IWindow.SystemWindowType WindowType { set {/*ignored*/} }
+}
+

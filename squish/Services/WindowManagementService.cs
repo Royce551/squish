@@ -1,4 +1,5 @@
 ﻿using Squish.Interop;
+using Squish.Interop.Mock;
 using Squish.Interop.X11;
 
 namespace Squish.Services;
@@ -16,8 +17,7 @@ public class WindowManagementService
             WindowManager = new X11Environment();
             return;
         }
-        throw new Exception("Platform not supported");
-        //LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
-        //WindowManager = new MockWindowManager();
+        LoggingService.Log("No window manager found for platform, using mocks", Severity.Warning);
+        WindowManager = new MockEnvironment();
     }
 }

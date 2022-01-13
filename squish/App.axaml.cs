@@ -6,6 +6,7 @@ using Squish.Models;
 using Squish.Interop.X11;
 using Squish.Services;
 using Squish.Views.Taskbar;
+using Squish.Views.Desktop;
 
 namespace Squish;
 
@@ -52,6 +53,7 @@ public class App : Application
         X11Exception.InitialiseExceptionHandling();
 
         LoggingService.Log("Starting desktop...", Severity.Info);
-        new Taskbar().Show();
+        //new Taskbar().Show();
+        new Desktop().Show();
     }
 }
