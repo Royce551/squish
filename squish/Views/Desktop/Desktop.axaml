@@ -4,8 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:vm="using:Squish.ViewModels.Desktop"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="Squish.Views.Desktop.Desktop" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent"
-        Title="Desktop">
+        x:Class="Squish.Views.Desktop.Desktop" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent" WindowState="Maximized"
+        Title="squish Desktop">
 	<Window.DataContext>
 		<vm:DesktopViewModel/>
 	</Window.DataContext>

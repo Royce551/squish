@@ -11,6 +11,9 @@ public static class JsonService
 {
     public static async Task<T> ReadAsync<T>(string path) where T : new()
     {
+        var directory = Path.GetDirectoryName(path)!;
+        if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+
         if (!File.Exists(path))
         {
             var x = new T();

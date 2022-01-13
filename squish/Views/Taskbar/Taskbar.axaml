@@ -5,7 +5,7 @@
 		xmlns:vm="using:Squish.ViewModels.Taskbar"
         mc:Ignorable="d" Width="50" Height="500" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent"
         x:Class="Squish.Views.Taskbar.Taskbar" 
-        Title="Taskbar">
+        Title="squish Taskbar">
 
 	<Window.DataContext>
 		<vm:TaskbarViewModel/>
