@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:Squish.ViewModels.Widgetbar"
+        mc:Ignorable="d" Width="750" Height="20" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent"
+        x:Class="Squish.Views.Widgetbar.Widgetbar"
+        Title="squish Widgetbar">
+	<Window.DataContext>
+		<vm:WidgetbarViewModel/>
+	</Window.DataContext>
+
+	<Border Background="{StaticResource SecondaryColor}">
+		<ItemsControl Items="{Binding Widgets}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+		</ItemsControl>
+	</Border>
+</Window>

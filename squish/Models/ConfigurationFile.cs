@@ -9,6 +9,8 @@ namespace Squish.Models;
 
 public class ConfigurationFile
 {
+    public static string SavePath => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "squish", "config.json");
+
     /// <summary>
     /// The ISO language code for the current language, or "automatic" for the system default
     /// </summary>

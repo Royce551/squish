@@ -11,8 +11,6 @@
     <AvaloniaXaml Remove="Utilities\**" />
     <Compile Remove="Utilities\**" />
     <EmbeddedResource Remove="Utilities\**" />
-    <Folder Include="ViewModels\Widgetbar\" />
-    <Folder Include="Views\Widgetbar\" />
     <None Remove="Utilities\**" />
     <AvaloniaResource Remove="Assets\placeholderDefaultBackground.png" />
     <Folder Include="ViewModels\Launcher\" />

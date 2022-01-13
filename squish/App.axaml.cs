@@ -7,6 +7,7 @@ using Squish.Interop.X11;
 using Squish.Services;
 using Squish.Views.Taskbar;
 using Squish.Views.Desktop;
+using Squish.Views.Widgetbar;
 
 namespace Squish;
 
@@ -43,9 +44,9 @@ public class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
+    private async void Desktop_Exit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
     {
-
+        await JsonService.WriteAsync(ConfigurationFile.SavePath, Config);
     }
 
     private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
@@ -56,5 +57,6 @@ public class App : Application
         LoggingService.Log("Starting desktop...", Severity.Info);
         new Desktop().Show();
         new Taskbar().Show();
+        new Widgetbar().Show();
     }
 }
