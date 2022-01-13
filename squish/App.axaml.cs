@@ -50,10 +50,11 @@ public class App : Application
 
     private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
     {
-        X11Exception.InitialiseExceptionHandling();
+        if (WindowManager is X11Environment)
+            X11Exception.InitialiseExceptionHandling();
 
         LoggingService.Log("Starting desktop...", Severity.Info);
-        //new Taskbar().Show();
         new Desktop().Show();
+        new Taskbar().Show();
     }
 }
