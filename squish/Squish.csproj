@@ -9,12 +9,18 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
     <AvaloniaXaml Remove="Utilities\**" />
+    <AvaloniaXaml Remove="ViewModels\Launcher\**" />
+    <AvaloniaXaml Remove="Views\Launcher\**" />
     <Compile Remove="Utilities\**" />
+    <Compile Remove="ViewModels\Launcher\**" />
+    <Compile Remove="Views\Launcher\**" />
     <EmbeddedResource Remove="Utilities\**" />
+    <EmbeddedResource Remove="ViewModels\Launcher\**" />
+    <EmbeddedResource Remove="Views\Launcher\**" />
     <None Remove="Utilities\**" />
+    <None Remove="ViewModels\Launcher\**" />
+    <None Remove="Views\Launcher\**" />
     <AvaloniaResource Remove="Assets\placeholderDefaultBackground.png" />
-    <Folder Include="ViewModels\Launcher\" />
-    <Folder Include="Views\Launcher\" />
     <None Remove=".gitignore" />
     <None Remove="FreeDesktop\NewFile1.txt" />
   </ItemGroup>
