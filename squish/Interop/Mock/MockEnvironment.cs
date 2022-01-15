@@ -10,7 +10,25 @@ namespace Squish.Interop.Mock;
 
 public class MockEnvironment : IEnvironment
 {
-    public List<IWindow> RunningWindows => new List<IWindow>() { new MockWindow() };
+    public List<IWindow> RunningWindows => new List<IWindow>()
+    {
+        new MockWindow
+        {
+            Title = "I"
+        },
+        new MockWindow
+        {
+            Title = "love"
+        },
+        new MockWindow
+        {
+            Title = "cute"
+        },
+        new MockWindow
+        {
+            Title = "catgirls"
+        }
+    };
 
     public IWindow? FocusedWindow { get => RunningWindows[0]; set { /*ignored*/} }
 

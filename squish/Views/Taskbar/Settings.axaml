@@ -1,0 +1,100 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:vm="using:Squish.ViewModels.Taskbar"
+        mc:Ignorable="d" Width="600" Height="700" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent"
+        x:Class="Squish.Views.Taskbar.Settings"
+        Title="Settings">
+	<Window.DataContext>
+		<vm:SettingsViewModel/>
+	</Window.DataContext>
+	<Window.Styles>
+		<Style Selector="TextBlock.Section">
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="-10,0,0,0"/>
+		</Style>
+		<Style Selector="TextBlock.Subsection">
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="Margin" Value="-10,0,0,0"/>
+		</Style>
+	</Window.Styles>
+	
+	<Border Background="{StaticResource ForegroundColor}" CornerRadius="8">
+		<ScrollViewer Margin="10">
+			<StackPanel Margin="10,0,0,0">
+				<TextBlock FontSize="20" FontWeight="Bold" Margin="-10,10,0,10" Text="squish Settings"/>
+				
+				<TextBlock Classes="Section" Text="General"/>
+
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+					<TextBlock Text="Language" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<ComboBox>
+						<!--<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Name}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>-->
+						<ComboBox.Items>
+							<ComboBoxItem>English</ComboBoxItem>
+							<ComboBoxItem>English (Weeaboo)</ComboBoxItem>
+						</ComboBox.Items>
+					</ComboBox>
+				</StackPanel>
+
+				<TextBlock Classes="Subsection" Text="Taskbar"/>
+				<CheckBox Content="Show on left"/>
+				<CheckBox Content="Use compact taskbar"/>
+				<CheckBox Content="Use large buttons"/>
+				<TextBlock Classes="Subsection" Text="Widgetbar"/>
+				<CheckBox Content="Show on bottom"/>
+				
+				<TextBlock Classes="Section" Text="Appearance"/>
+				<TextBlock Classes="Subsection" Text="Global"/>
+				<!--<TextBlock Foreground="{StaticResource SecondaryTextColor}" Text="These settings affect all supported apps"/>-->
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+					<TextBlock Text="Font" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<ComboBox>
+						<!--<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Name}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>-->
+						<ComboBox.Items>
+							<ComboBoxItem>IBM Plex Sans</ComboBoxItem>
+						</ComboBox.Items>
+					</ComboBox>
+				</StackPanel>
+				<TextBlock Classes="Subsection" Text="squish"/>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+					<TextBlock Text="Theme" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<ComboBox>
+						<ComboBox.Items>
+							<ComboBoxItem>Dark</ComboBoxItem>
+							<ComboBoxItem>Light</ComboBoxItem>
+						</ComboBox.Items>
+					</ComboBox>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+					<TextBlock Text="Accent Color" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<ComboBox>
+						<ComboBox.Items>
+							<ComboBoxItem>Blue</ComboBoxItem>
+							<ComboBoxItem>Green</ComboBoxItem>
+						</ComboBox.Items>
+					</ComboBox>
+				</StackPanel>
+				<TextBlock Classes="Subsection" Text="GTK"/>
+				<TextBlock Classes="Subsection" Text="Qt"/>
+
+				<TextBlock Classes="Section" Text="Plugins"/>
+				
+				<Button Command="{Binding OpenPluginInstallLocationCommand}" Content="Open plugin folder"/>
+				<TextBlock Classes="Section" Text="About"/>
+			</StackPanel>
+		</ScrollViewer>
+	</Border>
+</Window>

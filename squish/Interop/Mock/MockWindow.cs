@@ -11,7 +11,7 @@ public class MockWindow : IWindow
 {
     public object WindowHandle => null;
 
-    public string Title => "i love catgirls";
+    public string Title { get; set; } = "Window";
 
     public Bitmap? Icon => null;
 

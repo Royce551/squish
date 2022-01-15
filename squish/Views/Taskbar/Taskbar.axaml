@@ -13,15 +13,16 @@
 
 	<Window.Resources>
 		<vm:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
-		<vm:BytesToImageConverter x:Key="BytesToImageConverter"/>
 	</Window.Resources>
 	
 	<Border Background="{StaticResource ForegroundColor}" CornerRadius="4">
-		<Panel>
+		<StackPanel VerticalAlignment="Stretch">
+			<Button VerticalAlignment="Top" Content="placeholder launcher button" Command="{Binding OpenLauncherCommand}" Margin="0,10">
+			</Button>
 			<ListBox HorizontalAlignment="Stretch" VerticalAlignment="Center" SelectionMode="AlwaysSelected" SelectedItem="{Binding ActiveWindow}" Items="{Binding RunningWindows}" Background="Transparent">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<Grid Height="50" ToolTip.Tip="{Binding Title}" ToolTip.Placement="Left" ToolTip.ShowDelay="0" Background="Transparent" Margin="-10">
+						<Grid ToolTip.Tip="{Binding Title}" ToolTip.Placement="Left" ToolTip.ShowDelay="0" Background="Transparent" Margin="-10" Height="65">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="1*"/>
 								<ColumnDefinition Width="Auto"/>
@@ -32,7 +33,7 @@
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
-		</Panel>
+		</StackPanel>
 	</Border>
 	
 </Window>
