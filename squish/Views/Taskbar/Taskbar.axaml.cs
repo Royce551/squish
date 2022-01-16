@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
 using Squish.Interop;
+using Squish.Services;
 using Squish.ViewModels.Taskbar;
 
 namespace Squish.Views.Taskbar;
@@ -15,6 +16,7 @@ public partial class Taskbar : Window
 
     public Taskbar()
     {
+        LoggingService.LogDebug("Starting taskbar");
         InitializeComponent();
 #if DEBUG
         this.AttachDevTools();
