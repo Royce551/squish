@@ -3,17 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squish", "squish\Squish.csproj", "{3689DD11-222B-450D-8377-91ED7FA87244}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Squish", "squish\Squish.csproj", "{3689DD11-222B-450D-8377-91ED7FA87244}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SquishTests", "SquishTests\SquishTests.csproj", "{1D6E15AB-D8BE-4B3A-BD0F-9DC1F9731568}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Squish.Launcher", "Squish.Launcher\Squish.Launcher.csproj", "{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}"
+EndProject
 Global
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {A768C3AF-90A3-422D-BC92-CDAC3D4AC5D1}
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -47,5 +43,23 @@ Global
 		{1D6E15AB-D8BE-4B3A-BD0F-9DC1F9731568}.Release|x64.Build.0 = Release|Any CPU
 		{1D6E15AB-D8BE-4B3A-BD0F-9DC1F9731568}.Release|x86.ActiveCfg = Release|Any CPU
 		{1D6E15AB-D8BE-4B3A-BD0F-9DC1F9731568}.Release|x86.Build.0 = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|x64.Build.0 = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Debug|x86.Build.0 = Debug|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|x64.ActiveCfg = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|x64.Build.0 = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|x86.ActiveCfg = Release|Any CPU
+		{38BE1238-2FF9-4C9B-9E58-8D493AEE1D4F}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A768C3AF-90A3-422D-BC92-CDAC3D4AC5D1}
 	EndGlobalSection
 EndGlobal
