@@ -10,4 +10,12 @@ public interface IEnvironment
     
     public event EventHandler<IWindow>? WindowOpened;
     public event EventHandler<IWindow>? WindowClosed;
+
+    public void Shutdown();
+
+    public void Restart();
+
+    public void Logout();
+
+    public void Sleep();
 }

@@ -39,4 +39,24 @@ public class MockEnvironment : IEnvironment
     {
         return RunningWindows[0];
     }
+
+    public void Logout()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Restart()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Shutdown()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void Sleep()
+    {
+        throw new NotImplementedException();
+    }
 }

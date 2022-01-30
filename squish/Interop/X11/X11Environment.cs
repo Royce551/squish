@@ -1,9 +1,10 @@
 ﻿using static TerraFX.Interop.Xlib.Xlib;
 using TerraFX.Interop.Xlib;
+using Squish.Interop.Linux;
 
 namespace Squish.Interop.X11;
 
-public unsafe class X11Environment : IEnvironment
+public unsafe class X11Environment : LinuxEnvironment
 {
     private readonly Thread eventLoopThread;
     public X11Environment()
@@ -74,17 +75,17 @@ public unsafe class X11Environment : IEnvironment
 
     public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;
 
-    public IWindow? GetWindowForWindowHandle(IntPtr handle)
+    public override IWindow? GetWindowForWindowHandle(IntPtr handle)
     {
         return RunningWindows.FirstOrDefault(window => (Window) window.WindowHandle == (Window) handle) ?? new X11Window((Window) handle);
     }
 
-    public event EventHandler<IWindow>? WindowOpened;
-    public event EventHandler<IWindow>? WindowClosed;
+    public override event EventHandler<IWindow>? WindowOpened;
+    public override event EventHandler<IWindow>? WindowClosed;
     
-    public List<IWindow> RunningWindows { get; }
+    public override List<IWindow> RunningWindows { get; }
 
-    public IWindow? FocusedWindow
+    public override IWindow? FocusedWindow
     {
         get
         {
