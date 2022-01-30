@@ -10,7 +10,7 @@
 		<vm:WidgetbarViewModel/>
 	</Window.DataContext>
 
-	<Border Background="{StaticResource SecondaryColor}" Height="20">
+	<Border Background="{DynamicResource SecondaryColor}" Height="20">
 		<ItemsControl Items="{Binding Widgets}">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>

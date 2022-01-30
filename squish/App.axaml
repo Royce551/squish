@@ -7,8 +7,8 @@
     </Application.DataTemplates>
 
     <Application.Styles>
-		<FluentTheme Mode="Dark"/>
-		<StyleInclude Source="avares://SIADL.Avalonia/DarkTheme.axaml"/>
+		<FluentTheme Mode="Light"/>
+		<StyleInclude Source="avares://SIADL.Avalonia/LightTheme.axaml"/>
 		<Style Selector="ListBoxItem">
 			<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
 		</Style>

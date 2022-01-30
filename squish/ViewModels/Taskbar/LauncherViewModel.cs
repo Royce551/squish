@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Squish.Views.Taskbar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,7 @@ public class LauncherViewModel : ViewModelBase
 {
     public void OpenSettingsCommand()
     {
-
+        new Settings().Show();
     }
 
     public void OpenEndSessionMenuCommand()

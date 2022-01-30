@@ -23,7 +23,7 @@
 		</Style>
 	</Window.Styles>
 	
-	<Border Background="{StaticResource ForegroundColor}" CornerRadius="8">
+	<Border Background="{DynamicResource ForegroundColor}" CornerRadius="8">
 		<ScrollViewer Margin="10,10,0,10">
 			<StackPanel Margin="10,0,0,0">
 				<TextBlock FontSize="20" FontWeight="Bold" Margin="-10,10,0,10" Text="squish Settings"/>
@@ -71,7 +71,7 @@
 				</StackPanel>
 					<Button Command="{Binding BrowseForWallpaperCommand}" Content="Browse for wallpaper..."/>
 				<TextBlock Classes="Subsection" Text="Global"/>
-				<!--<TextBlock Foreground="{StaticResource SecondaryTextColor}" Text="These settings affect all supported apps"/>-->
+				<!--<TextBlock Foreground="{DynamicResource SecondaryTextColor}" Text="These settings affect all supported apps"/>-->
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
 					<TextBlock Text="Font" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox>
@@ -88,10 +88,10 @@
 				<TextBlock Classes="Subsection" Text="squish Theme"/>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
 					<TextBlock Text="Color Theme" Margin="0,0,10,0" VerticalAlignment="Center"/>
-					<ComboBox>
+					<ComboBox SelectedIndex="{Binding ThemeSelectedIndex}">
 						<ComboBox.Items>
-							<ComboBoxItem>Dark</ComboBoxItem>
 							<ComboBoxItem>Light</ComboBoxItem>
+							<ComboBoxItem>Dark</ComboBoxItem>
 						</ComboBox.Items>
 					</ComboBox>
 				</StackPanel>

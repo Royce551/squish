@@ -15,7 +15,7 @@
 		<vm:BoolToOpacityConverter x:Key="BoolToOpacityConverter"/>
 	</Window.Resources>
 	
-	<Border Background="{StaticResource ForegroundColor}" CornerRadius="4">
+	<Border Background="{DynamicResource ForegroundColor}" CornerRadius="4">
 		<StackPanel VerticalAlignment="Stretch">
 			<Button VerticalAlignment="Top" Content="placeholder launcher button" Command="{Binding OpenLauncherCommand}" Margin="0,10">
 			</Button>
@@ -28,7 +28,7 @@
 								<ColumnDefinition Width="Auto"/>
 							</Grid.ColumnDefinitions>
 							<Image Grid.Column="0" Margin="2,0,0,0" Source="{Binding Icon}"/>
-							<Border Grid.Column="1" Width="4" CornerRadius="6" Margin="5,5,0,5" Background="{StaticResource Blue}"/>
+							<Border Grid.Column="1" Width="4" CornerRadius="6" Margin="5,5,0,5" Background="{DynamicResource Blue}"/>
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
