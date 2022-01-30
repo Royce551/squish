@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:resx="using:Squish.Properties"
 		xmlns:vm="using:Squish.ViewModels.Desktop"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Squish.Views.Desktop.Desktop" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent" WindowState="Maximized"
@@ -13,7 +14,7 @@
 	<Image Source="{Binding Background}" Stretch="{Binding StretchMode}">
 		<Image.ContextMenu>
 			<ContextMenu>
-				<MenuItem Header="Change Background..." Command="{Binding ChangeBackgroundCommand}"/>
+				<MenuItem Header="{x:Static resx:Resources.Desktop_ChangeBackground}" Command="{Binding ChangeBackgroundCommand}"/>
 			</ContextMenu>
 		</Image.ContextMenu>
 	</Image>

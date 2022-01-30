@@ -2,6 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:resx="using:Squish.Properties"
 		xmlns:vm="using:Squish.ViewModels.Taskbar"
         mc:Ignorable="d" Width="600" Height="700" SystemDecorations="None" Background="Transparent" TransparencyLevelHint="Transparent"
         x:Class="Squish.Views.Taskbar.Settings"
@@ -26,12 +27,12 @@
 	<Border Background="{DynamicResource ForegroundColor}" CornerRadius="8">
 		<ScrollViewer Margin="10,10,0,10">
 			<StackPanel Margin="10,0,0,0">
-				<TextBlock FontSize="20" FontWeight="Bold" Margin="-10,10,0,10" Text="squish Settings"/>
+				<TextBlock FontSize="20" FontWeight="Bold" Margin="-10,10,0,10" Text="{x:Static resx:Resources.Settings}"/>
 				
-				<TextBlock Classes="Section" Text="General"/>
+				<TextBlock Classes="Section" Text="{x:Static resx:Resources.General}"/>
 
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-					<TextBlock Text="Language" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static resx:Resources.Language}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox>
 						<!--<ComboBox.ItemTemplate>
 							<DataTemplate>
@@ -45,17 +46,17 @@
 					</ComboBox>
 				</StackPanel>
 
-				<TextBlock Classes="Subsection" Text="Taskbar"/>
-				<CheckBox Content="Show on left"/>
-				<CheckBox Content="Use compact taskbar"/>
-				<CheckBox Content="Use large buttons"/>
-				<TextBlock Classes="Subsection" Text="Widgetbar"/>
-				<CheckBox Content="Show on bottom"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Taskbar}"/>
+				<CheckBox Content="{x:Static resx:Resources.ShowOnLeft}"/>
+				<CheckBox Content="{x:Static resx:Resources.Taskbar_Compact}"/>
+				<CheckBox Content="{x:Static resx:Resources.LargeButtons}"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Widgetbar}"/>
+				<CheckBox Content="{x:Static resx:Resources.ShowOnBottom}"/>
 				
-				<TextBlock Classes="Section" Text="Appearance"/>
-				<TextBlock Classes="Subsection" Text="Wallpaper"/>
+				<TextBlock Classes="Section" Text="{x:Static resx:Resources.Appearance}"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Wallpaper}"/>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-					<TextBlock Text="Resize Style" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static resx:Resources.ResizeStyle}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox>
 						<!--<ComboBox.ItemTemplate>
 							<DataTemplate>
@@ -63,17 +64,17 @@
 							</DataTemplate>
 						</ComboBox.ItemTemplate>-->
 						<ComboBox.Items>
-							<ComboBoxItem>Stretch</ComboBoxItem>
-							<ComboBoxItem>Letterbox</ComboBoxItem>
-							<ComboBoxItem>Zoom</ComboBoxItem>
+							<ComboBoxItem Content="{x:Static resx:Resources.ResizeStyle_Stretch}"/>
+							<ComboBoxItem Content="{x:Static resx:Resources.ResizeStyle_Letterbox}"/>
+							<ComboBoxItem Content="{x:Static resx:Resources.ResizeStyle_Zoom}"/>
 						</ComboBox.Items>
 					</ComboBox>
 				</StackPanel>
-					<Button Command="{Binding BrowseForWallpaperCommand}" Content="Browse for wallpaper..."/>
-				<TextBlock Classes="Subsection" Text="Global"/>
+					<Button Command="{Binding BrowseForWallpaperCommand}" Content="{x:Static resx:Resources.Wallpaper_Browse}"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Global}"/>
 				<!--<TextBlock Foreground="{DynamicResource SecondaryTextColor}" Text="These settings affect all supported apps"/>-->
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-					<TextBlock Text="Font" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static resx:Resources.Font}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox>
 						<!--<ComboBox.ItemTemplate>
 							<DataTemplate>
@@ -85,32 +86,32 @@
 						</ComboBox.Items>
 					</ComboBox>
 				</StackPanel>
-				<TextBlock Classes="Subsection" Text="squish Theme"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Theme_squish}"/>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-					<TextBlock Text="Color Theme" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static resx:Resources.ColorTheme}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox SelectedIndex="{Binding ThemeSelectedIndex}">
 						<ComboBox.Items>
-							<ComboBoxItem>Light</ComboBoxItem>
-							<ComboBoxItem>Dark</ComboBoxItem>
+							<ComboBoxItem Content="{x:Static resx:Resources.Light}"/>
+							<ComboBoxItem Content="{x:Static resx:Resources.Dark}"/>
 						</ComboBox.Items>
 					</ComboBox>
 				</StackPanel>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-					<TextBlock Text="Accent Color" Margin="0,0,10,0" VerticalAlignment="Center"/>
+					<TextBlock Text="{x:Static resx:Resources.AccentColor}" Margin="0,0,10,0" VerticalAlignment="Center"/>
 					<ComboBox>
 						<ComboBox.Items>
-							<ComboBoxItem>Blue</ComboBoxItem>
-							<ComboBoxItem>Green</ComboBoxItem>
+							<ComboBoxItem Content="{x:Static resx:Resources.Blue}"/>
+							<ComboBoxItem Content="{x:Static resx:Resources.Green}"/>
 						</ComboBox.Items>
 					</ComboBox>
 				</StackPanel>
-				<TextBlock Classes="Subsection" Text="GTK Theme"/>
-				<TextBlock Classes="Subsection" Text="Qt Theme"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Theme_GTK}"/>
+				<TextBlock Classes="Subsection" Text="{x:Static resx:Resources.Theme_Qt}"/>
 
-				<TextBlock Classes="Section" Text="Plugins"/>
+				<TextBlock Classes="Section" Text="{x:Static resx:Resources.Plugins}"/>
 				
-				<Button Command="{Binding OpenPluginInstallLocationCommand}" Content="Open plugin folder"/>
-				<TextBlock Classes="Section" Text="About"/>
+				<Button Command="{Binding OpenPluginInstallLocationCommand}" Content="{x:Static resx:Resources.Plugins_OpenFolder}"/>
+				<TextBlock Classes="Section" Text="{x:Static resx:Resources.About}"/>
 			</StackPanel>
 		</ScrollViewer>
 	</Border>
