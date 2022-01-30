@@ -2,14 +2,18 @@
 
 using System.Diagnostics;
 
+var allArgs = new List<string>(args);
+
+int errorCount = 0;
+
 while (true)
 {
     var squish = new Process
     {
         StartInfo = new()
         {
-            FileName = "Squish", // for now we're assuming we're next to squish, maybe add cli arg later?
-            Arguments = string.Join(" ", args)
+            FileName = "Squish", // maybe add cli arg for starting squish in an specified place later?
+            Arguments = string.Join(" ", allArgs)
         }
     };
 
@@ -18,8 +22,10 @@ while (true)
 
     if (squish.ExitCode != 0)
     {
-        Console.WriteLine("looks like squish crashed :(");
-        Process.Start("Squish", "--error-recovery");
+        Console.WriteLine("squish crashed :(");
+        if (errorCount < 1) allArgs.Add("--error-occurred");
+        else allArgs.Add("--error-recovery");
+        errorCount++;
     }
     else return;
 }
