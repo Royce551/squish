@@ -66,6 +66,7 @@ public class App : Application
 
     private void HandleTheme()
     {
+        LoggingService.LogInfo("Theme is changing!");
         var lightSIADLTheme = new StyleInclude(new Uri("avares://SIADL.Avalonia"))
         {
             Source = new Uri("avares://SIADL.Avalonia/LightTheme.axaml")
@@ -97,6 +98,7 @@ public class App : Application
 
     private void Config_PropertyChanged(object? sender, string e)
     {
+        LoggingService.LogDebug($"The configuration property {e} changed");
         if (e == nameof(Config.Theme)) HandleTheme();
     }
 }

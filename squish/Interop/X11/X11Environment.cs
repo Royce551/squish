@@ -1,6 +1,7 @@
 ﻿using static TerraFX.Interop.Xlib.Xlib;
 using TerraFX.Interop.Xlib;
 using Squish.Interop.Linux;
+using Squish.Services;
 
 namespace Squish.Interop.X11;
 
@@ -30,7 +31,6 @@ public unsafe class X11Environment : LinuxEnvironment
         RunningWindows = new List<IWindow>();
 
         XSelectInput(X11Info.Display, X11Info.DefaultRootWindow, PropertyChangeMask);
-
         X11PropertyNotifyReceived += OnX11PropertyNotifyReceived;
         UpdateClientList();
     }
@@ -50,8 +50,8 @@ public unsafe class X11Environment : LinuxEnvironment
 
     private void UpdateClientList()
     {
+        LoggingService.LogDebug("Updating client list");
         var clientList = X11Utilities.GetWindowProperty<ulong>("_NET_CLIENT_LIST", X11Info.DefaultRootWindow, XA_WINDOW);
-
         //Find out which windows no longer exist
         var windowsToRemove = RunningWindows.Where(window => !clientList.Contains((ulong) (Window) window.WindowHandle)).ToList();
         foreach (var window in windowsToRemove)
@@ -59,13 +59,10 @@ public unsafe class X11Environment : LinuxEnvironment
             WindowClosed?.Invoke(this, window);
             RunningWindows.Remove(window);
         }
-        
         //Find out which windows to add
-        var windowsToAdd = clientList.Where(windowHandle => RunningWindows.All(window => (ulong) (Window) window.WindowHandle != windowHandle))
-            .Select(windowHandle => new X11Window((Window) windowHandle))
-            .Cast<IWindow>()
-            .ToList();
-
+        var windowsToAdd = clientList.Where(windowHandle => RunningWindows.All(window => (ulong)(Window)window.WindowHandle != windowHandle))
+            .Select(windowHandle => new X11Window((Window)windowHandle))
+            .Cast<IWindow>();
         foreach (var window in windowsToAdd)
         {
             RunningWindows.Add(window);
