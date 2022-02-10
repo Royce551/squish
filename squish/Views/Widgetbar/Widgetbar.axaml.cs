@@ -44,9 +44,9 @@ namespace Squish.Views.Widgetbar
             if (platformWindow != null)
             {
                 //TODO: This might smash in multi monitor setups
-                platformWindow.ReservedScreenArea = new IWindow.ScreenMargins(0, 0, (int)(unioned.X - screenBounds.X + Height), 0,
+                platformWindow.ReservedScreenArea = new ScreenMargins(0, 0, (int)(unioned.X - screenBounds.X + Height), 0,
                     0, 0, 0, 0, screenBounds.X, (int)(screenBounds.X + Height), 0, 0);
-                platformWindow.WindowType = IWindow.SystemWindowType.Taskbar;
+                platformWindow.WindowType = SystemWindowType.Taskbar;
             }
 
             Position = new PixelPoint(0,0);

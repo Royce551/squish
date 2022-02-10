@@ -68,7 +68,7 @@ public unsafe class X11Window : IWindow
         }
     }
 
-    public IWindow.ScreenMargins ReservedScreenArea
+    public ScreenMargins ReservedScreenArea
     {
         set
         {
@@ -93,30 +93,30 @@ public unsafe class X11Window : IWindow
         }
     }
 
-    public IWindow.SystemWindowType WindowType
+    public SystemWindowType WindowType
     {
         set
         {
             long desktop = 0xFFFFFFFF;
             XChangeProperty(X11Info.Display, window, X11Utilities.XUInternAtom("_NET_WM_DESKTOP"), XA_CARDINAL, 32,
                 PropModeReplace, (byte*) &desktop, 1);
-            
+
             var useSecondAtom = false;
             var atoms = stackalloc Atom[2];
             
             switch (value)
             {
-                case IWindow.SystemWindowType.SkipTaskbarOnly:
+                case SystemWindowType.SkipTaskbarOnly:
                     //Set to _NET_WM_WINDOW_TYPE_NORMAL
                     atoms[0] = X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE_NORMAL");
                     break;
-                case IWindow.SystemWindowType.Desktop:
+                case SystemWindowType.Desktop:
                     atoms[0] = X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE_DESKTOP");
                     break;
-                case IWindow.SystemWindowType.Taskbar:
+                case SystemWindowType.Taskbar:
                     atoms[0] = X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE_DOCK");
                     break;
-                case IWindow.SystemWindowType.Notification:
+                case SystemWindowType.Notification:
                     atoms[0] = X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE_NOTIFICATION");
                     atoms[1] = X11Utilities.XUInternAtom("_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY");
                     useSecondAtom = true;

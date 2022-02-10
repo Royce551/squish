@@ -40,22 +40,22 @@ public class MockEnvironment : IEnvironment
         return RunningWindows[0];
     }
 
-    public void Logout()
+    public void LogoutPC()
     {
         throw new NotImplementedException();
     }
 
-    public void Restart()
+    public void RestartPC()
     {
         throw new NotImplementedException();
     }
 
-    public void Shutdown()
+    public void ShutdownPC()
     {
         throw new NotImplementedException();
     }
 
-    public void Sleep()
+    public void SleepPC()
     {
         throw new NotImplementedException();
     }

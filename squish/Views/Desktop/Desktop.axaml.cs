@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Squish.Interop;
 using Squish.Services;
@@ -27,8 +28,15 @@ namespace Squish.Views.Desktop
             }
         }
 
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (e.Key == Key.X) UpdateStruts();
+            base.OnKeyDown(e);
+        }
+
         private void UpdateStruts()
         {
+            LoggingService.LogDebug("UpdateStruts");
             if (Screens is null) return;
 
             var screenBounds = Screens.Primary.Bounds;
@@ -39,7 +47,7 @@ namespace Squish.Views.Desktop
             if (platformWindow != null)
             {
                 //TODO: This might smash in multi monitor setups
-                platformWindow.WindowType = IWindow.SystemWindowType.Desktop;
+                platformWindow.WindowType = SystemWindowType.Desktop;
             }
 
             Position = new PixelPoint(0,0);

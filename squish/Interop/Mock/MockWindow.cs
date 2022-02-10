@@ -15,7 +15,7 @@ public class MockWindow : IWindow
 
     public Bitmap? Icon => null;
 
-    public IWindow.ScreenMargins ReservedScreenArea { set { /*ignored*/} }
-    public IWindow.SystemWindowType WindowType { set {/*ignored*/} }
+    public ScreenMargins ReservedScreenArea { set { /*ignored*/} }
+    public SystemWindowType WindowType { set {/*ignored*/} }
 }
 

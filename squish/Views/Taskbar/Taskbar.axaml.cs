@@ -46,9 +46,9 @@ public partial class Taskbar : Window
         if (platformWindow != null)
         {
             //TODO: This might smash in multi monitor setups
-            platformWindow.ReservedScreenArea = new IWindow.ScreenMargins(0, (int) (unioned.Right - screenBounds.Right + Width), 0, 0,
+            platformWindow.ReservedScreenArea = new ScreenMargins(0, (int) (unioned.Right - screenBounds.Right + Width), 0, 0,
                 0, 0, screenBounds.Y, screenBounds.Bottom, 0, 0, 0, 0);
-            platformWindow.WindowType = IWindow.SystemWindowType.Taskbar;
+            platformWindow.WindowType = SystemWindowType.Taskbar;
         }
         
         Position = new PixelPoint((int) (screenBounds.Right - Width), screenBounds.Y); 
