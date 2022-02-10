@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ public abstract class LinuxEnvironment : IEnvironment
 
     public void LogoutPC()
     {
-        throw new NotImplementedException();
+        Environment.Exit(0);
     }
 
     public void RestartPC()

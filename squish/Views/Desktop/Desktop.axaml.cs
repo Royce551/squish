@@ -43,7 +43,7 @@ namespace Squish.Views.Desktop
 
             var unioned = Screens.All.Aggregate(Screens.Primary.Bounds, (current, screen) => current.Union(screen.Bounds));
 
-            var platformWindow = App.WindowManager.GetWindowForWindowHandle(PlatformImpl.Handle.Handle);
+            var platformWindow = App.Environment.GetWindowForWindowHandle(PlatformImpl.Handle.Handle);
             if (platformWindow != null)
             {
                 //TODO: This might smash in multi monitor setups

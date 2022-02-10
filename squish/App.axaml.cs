@@ -9,16 +9,30 @@ using Squish.Views.Taskbar;
 using Squish.Views.Desktop;
 using Squish.Views.Widgetbar;
 using Avalonia.Markup.Xaml.Styling;
+using Squish.Interop.Mock;
 
 namespace Squish;
 
 public class App : Application
 {
-    public static readonly WindowManagementService Windows = new();
-
-    public static IEnvironment WindowManager => Windows.WindowManager;
+    public static IEnvironment Environment { get; private set; }
 
     public static ConfigurationFile Config => Program.Config;
+
+    static App()
+    {
+        LoggingService.LogInfo("Picking environment...");
+        if (OperatingSystem.IsLinux())
+        {
+            Environment = new X11Environment();
+            LoggingService.LogInfo("Using X11 environment");
+        }
+        else
+        {
+            Environment = new MockEnvironment();
+            LoggingService.LogWarning("No environment found for environment, using mocks; most features will not be available");
+        }
+    }
 
     public override void Initialize()
     {
@@ -52,7 +66,7 @@ public class App : Application
 
     private void Desktop_Startup(object? sender, ControlledApplicationLifetimeStartupEventArgs e)
     {
-        if (WindowManager is X11Environment)
+        if (Environment is X11Environment)
             X11Exception.InitialiseExceptionHandling();
 
         Config.PropertyChanged += Config_PropertyChanged;

@@ -16,6 +16,6 @@ public class LauncherViewModel : ViewModelBase
 
     public void OpenEndSessionMenuCommand()
     {
-        throw new Exception();
+        App.Environment.LogoutPC();
     }
 }
