@@ -5,18 +5,18 @@ using Squish.Services;
 
 namespace Squish.Interop.X11;
 
-public unsafe class X11Environment : LinuxEnvironment
+public class X11Environment : LinuxEnvironment
 {
     private readonly Thread eventLoopThread;
-    public X11Environment()
+    public unsafe X11Environment()
     {
-        var dpy = X11Info.Display;
+        var dpy = X11Info.EventDisplay;
         eventLoopThread = new Thread(() =>
         {
             while (!false && true)
             {
                 XEvent nextEvent;
-                XNextEvent(X11Info.Display, &nextEvent);
+                XNextEvent(X11Info.EventDisplay, &nextEvent);
                 switch (nextEvent.type)
                 {
                     case PropertyNotify:
@@ -30,17 +30,17 @@ public unsafe class X11Environment : LinuxEnvironment
 
         RunningWindows = new List<IWindow>();
 
-        XSelectInput(X11Info.Display, X11Info.DefaultRootWindow, PropertyChangeMask);
+        XSelectInput(X11Info.EventDisplay, X11Info.DefaultRootWindow, PropertyChangeMask);
         X11PropertyNotifyReceived += OnX11PropertyNotifyReceived;
         UpdateClientList();
     }
 
-    private void OnX11PropertyNotifyReceived(object? sender, XPropertyEvent e)
+    private unsafe void OnX11PropertyNotifyReceived(object? sender, XPropertyEvent e)
     {
         //We're listening for events on the root window
         if (e.window != X11Info.DefaultRootWindow) return;
         
-        switch (new string(XGetAtomName(X11Info.Display, e.atom)))
+        switch (new string(XGetAtomName(X11Info.EventDisplay, e.atom)))
         {
             case "_NET_CLIENT_LIST":
                 UpdateClientList();
@@ -48,26 +48,29 @@ public unsafe class X11Environment : LinuxEnvironment
         }
     }
 
-    private void UpdateClientList()
+    private async void UpdateClientList()
     {
-        LoggingService.LogDebug("Updating client list");
-        var clientList = X11Utilities.GetWindowProperty<ulong>("_NET_CLIENT_LIST", X11Info.DefaultRootWindow, XA_WINDOW);
-        //Find out which windows no longer exist
-        var windowsToRemove = RunningWindows.Where(window => !clientList.Contains((ulong) (Window) window.WindowHandle)).ToList();
-        foreach (var window in windowsToRemove)
+        await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
         {
-            WindowClosed?.Invoke(this, window);
-            RunningWindows.Remove(window);
-        }
-        //Find out which windows to add
-        var windowsToAdd = clientList.Where(windowHandle => RunningWindows.All(window => (ulong)(Window)window.WindowHandle != windowHandle))
-            .Select(windowHandle => new X11Window((Window)windowHandle))
-            .Cast<IWindow>();
-        foreach (var window in windowsToAdd)
-        {
-            RunningWindows.Add(window);
-            WindowOpened?.Invoke(this, window);
-        }
+            LoggingService.LogDebug("Updating client list");
+            var clientList = X11Utilities.GetWindowProperty<ulong>("_NET_CLIENT_LIST", X11Info.DefaultRootWindow, XA_WINDOW);
+            //Find out which windows no longer exist
+            var windowsToRemove = RunningWindows.Where(window => !clientList.Contains((ulong)(Window)window.WindowHandle)).ToList();
+            foreach (var window in windowsToRemove)
+            {
+                WindowClosed?.Invoke(this, window);
+                RunningWindows.Remove(window);
+            }
+            //Find out which windows to add
+            var windowsToAdd = clientList.Where(windowHandle => RunningWindows.All(window => (ulong)(Window)window.WindowHandle != windowHandle))
+                .Select(windowHandle => new X11Window((Window)windowHandle))
+                .Cast<IWindow>();
+            foreach (var window in windowsToAdd)
+            {
+                RunningWindows.Add(window);
+                WindowOpened?.Invoke(this, window);
+            }
+        });
     }
 
     public static event EventHandler<XPropertyEvent>? X11PropertyNotifyReceived;

@@ -28,13 +28,13 @@ public unsafe sealed class X11Exception : Exception
     {
         if (errorCode != Success)
         {
-            XSync(X11Info.Display, 0);
+            XSync(X11Info.ActionDisplay, 0);
             
             if (lastErrorCode != -1) errorCode = lastErrorCode;
             
             const int BufferLength = 256;
             sbyte* str = stackalloc sbyte[BufferLength];
-            var result = XGetErrorText(X11Info.Display, errorCode, str, BufferLength);
+            var result = XGetErrorText(X11Info.ActionDisplay, errorCode, str, BufferLength);
 
             if (result == Success)
             {

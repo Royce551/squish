@@ -42,7 +42,7 @@ public unsafe class X11Utilities
     {
         fixed (sbyte* pAtom = ToUtf8(atom))
         {
-            return XInternAtom(X11Info.Display, pAtom, 0);
+            return XInternAtom(X11Info.ActionDisplay, pAtom, 0);
         }
     }
 
@@ -55,7 +55,7 @@ public unsafe class X11Utilities
         T* data;
 
         X11Exception.ThrowForErrorCode(
-            XGetWindowProperty(X11Info.Display,
+            XGetWindowProperty(X11Info.ActionDisplay,
                 window,
                 property.AsAtom(),
                 offset,
@@ -102,6 +102,6 @@ public unsafe class X11Utilities
                 }
         };
         X11Exception.ThrowForErrorCode(
-            XSendEvent(X11Info.Display, window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
+            XSendEvent(X11Info.ActionDisplay, window, False, SubstructureRedirectMask | SubstructureNotifyMask, &@event));
     }
 }

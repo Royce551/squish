@@ -4,14 +4,25 @@ namespace Squish.Interop.X11;
 
 public static class X11Info
 {
-    public static unsafe Display* Display { get; }
+    /// <summary>
+    /// The display connection to be used for looking for events
+    /// Do not use for handling events or the entire app will hang!
+    /// </summary>
+    public static unsafe Display* EventDisplay { get; }
 
-    public static unsafe Window DefaultRootWindow => XDefaultRootWindow(Display);
+    /// <summary>
+    /// The display connection to be used for handling events
+    /// Do not use for looking for events or the entire app will hang!
+    /// </summary>
+    public static unsafe Display* ActionDisplay { get; }
 
-    public static unsafe int DefaultScreen => XDefaultScreen(Display);
+    public static unsafe Window DefaultRootWindow => XDefaultRootWindow(ActionDisplay);
+
+    public static unsafe int DefaultScreen => XDefaultScreen(ActionDisplay);
 
     static unsafe X11Info()
     {
-        Display = XOpenDisplay(null);
+        EventDisplay = XOpenDisplay(null);
+        ActionDisplay = XOpenDisplay(null);
     }
 }

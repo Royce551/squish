@@ -88,7 +88,7 @@ public unsafe class X11Window : IWindow
                 value.BottomEnd
             };
 
-            XChangeProperty(X11Info.Display, window, X11Utilities.XUInternAtom("_NET_WM_STRUT_PARTIAL"), XA_CARDINAL,
+            XChangeProperty(X11Info.ActionDisplay, window, X11Utilities.XUInternAtom("_NET_WM_STRUT_PARTIAL"), XA_CARDINAL,
                 32, PropModeReplace, (byte*) struts, 12);
         }
     }
@@ -98,7 +98,7 @@ public unsafe class X11Window : IWindow
         set
         {
             long desktop = 0xFFFFFFFF;
-            XChangeProperty(X11Info.Display, window, X11Utilities.XUInternAtom("_NET_WM_DESKTOP"), XA_CARDINAL, 32,
+            XChangeProperty(X11Info.ActionDisplay, window, X11Utilities.XUInternAtom("_NET_WM_DESKTOP"), XA_CARDINAL, 32,
                 PropModeReplace, (byte*) &desktop, 1);
 
             var useSecondAtom = false;
@@ -125,7 +125,7 @@ public unsafe class X11Window : IWindow
                     throw new ArgumentOutOfRangeException(nameof(value), value, null);
             }
 
-            XChangeProperty(X11Info.Display, window, X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE"), XA_CARDINAL,
+            XChangeProperty(X11Info.ActionDisplay, window, X11Utilities.XUInternAtom("_NET_WM_WINDOW_TYPE"), XA_CARDINAL,
                 32, PropModeReplace, (byte*) atoms, useSecondAtom ? 2 : 1);
 
         }
@@ -136,14 +136,14 @@ public unsafe class X11Window : IWindow
         window = windowId;
         
         XWindowAttributes attrs;
-        XGetWindowAttributes(X11Info.Display, windowId, &attrs);
-        XSelectInput(X11Info.Display, windowId, attrs.your_event_mask | PropertyChangeMask | StructureNotifyMask | SubstructureNotifyMask);
+        XGetWindowAttributes(X11Info.ActionDisplay, windowId, &attrs);
+        XSelectInput(X11Info.ActionDisplay, windowId, attrs.your_event_mask | PropertyChangeMask | StructureNotifyMask | SubstructureNotifyMask);
 
         X11Environment.X11PropertyNotifyReceived += (_, xevent) =>
         {
             if (xevent.window != window) return;
 
-            switch (new string(XGetAtomName(X11Info.Display, xevent.atom)))
+            switch (new string(XGetAtomName(X11Info.ActionDisplay, xevent.atom)))
             {
                 case "_NET_WM_NAME":
                     TitleChanged?.Invoke(this, Title);
